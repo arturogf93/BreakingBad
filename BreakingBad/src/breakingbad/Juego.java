@@ -1,8 +1,10 @@
 package breakingbad;
 //hola
+
 /**
  *
- * @author Oscar Abraham Rodriguez Quintanilla,  Arturo Armando Gonzalez Fernandez
+ * @author Oscar Abraham Rodriguez Quintanilla, Arturo Armando Gonzalez
+ * Fernandez
  */
 import javax.swing.JFrame;
 import java.awt.Graphics;
@@ -57,6 +59,11 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
     private boolean sound;              //flag para saber si se hace sonido
     private Image informacion;          //imagen de la informacion
     private boolean info;               //flag para saber si se despliega la informacion
+    private Image titulo;
+    private Image start;
+    private Image fondo;
+    private boolean empezar;
+    private int tituloMov;
 
     /**
      * Metodo <I>init</I> sobrescrito de la clase <code>Applet</code>.<P>
@@ -64,7 +71,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
      * usarse en el <code>Applet</code> y se definen funcionalidades.
      */
     public void init() throws IOException {
-        this.setSize(1000, 650);
+        this.setSize(1024, 683);
         info = false;
         sound = true;
         gameover = false;
@@ -102,6 +109,12 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         im_over = Toolkit.getDefaultToolkit().getImage(gURL);
         URL iURL = this.getClass().getResource("Images/Info.png");
         informacion = Toolkit.getDefaultToolkit().getImage(iURL);
+
+        titulo = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/titulo.png"));
+        start = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/start3.gif"));
+        fondo = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/fondo.gif"));
+        empezar=false;
+        tituloMov=0;
     }
 
     public void start() {
@@ -271,6 +284,10 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         if (vidas <= 0) {
             gameover = true;
         }
+        
+        if(empezar) {
+            tituloMov+=10;
+        }
 
     }
 
@@ -405,7 +422,12 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
                 gameover = false;
             }
         }
-        // Presiono izq
+
+        if (e.getKeyCode() == KeyEvent.VK_E) {  //dejo de presionar la tecla de arriba
+            if (!empezar) {
+                empezar = true;
+            }
+        }
     }
 
     /**
@@ -446,6 +468,8 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
             //Da un mensaje mientras se carga el dibujo	
             g.drawString("No se cargo la imagen..", 20, 20);
         }
+        g.drawImage(titulo, tituloMov, 0, this);
+        g.drawImage(start, tituloMov + 600, 100, this);
 
     }
 
