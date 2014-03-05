@@ -62,6 +62,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
     private Image titulo;
     private Image start;
     private Image fondo;
+    private Image meth;
     private boolean empezar;
     private int tituloMov;
 
@@ -112,9 +113,10 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
 
         titulo = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/titulo.png"));
         start = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/start3.gif"));
-        fondo = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/fondo.gif"));
-        empezar=false;
-        tituloMov=0;
+        fondo = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/fondo.png"));
+        meth = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/meth.jpg"));
+        empezar = false;
+        tituloMov = 0;
     }
 
     public void start() {
@@ -284,9 +286,9 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         if (vidas <= 0) {
             gameover = true;
         }
-        
-        if(empezar) {
-            tituloMov+=10;
+
+        if (empezar) {
+            tituloMov += 10;
         }
 
     }
@@ -468,8 +470,13 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
             //Da un mensaje mientras se carga el dibujo	
             g.drawString("No se cargo la imagen..", 20, 20);
         }
-        g.drawImage(titulo, tituloMov, 0, this);
-        g.drawImage(start, tituloMov + 600, 100, this);
+        for (int i = 80; i < 900; i += 42) {
+            for (int j = 100; j < 300; j += 21) {
+                    g.drawImage(meth, i, j, this);
+            }
+        }
+        //g.drawImage(titulo, tituloMov, 0, this);
+        //g.drawImage(start, tituloMov + 600, 100, this);
 
     }
 
