@@ -444,7 +444,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
      */
     public void paint1(Graphics g) {
         g.drawImage(fondo, 0, 0, this);
-        if (heroe != null && bomba != null) {
+        if (heroe != null && bomba != null && titulo != null) {
             if (gameover) {
                 g.drawImage(im_over, 0, 30, this);
             } else {
@@ -469,17 +469,17 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
             } else {
                 g.drawString("Sonido OFF", this.getWidth() - 75, 50);
             }
+            for (int i = 80; i < 900; i += 42) {
+                for (int j = 100; j < 300; j += 21) {
+                    g.drawImage(meth, i, j, this);
+                }
+            }
+            g.drawImage(titulo, tituloMov, 0, this);
+            g.drawImage(start, tituloMov + 600, 100, this);
         } else {
             //Da un mensaje mientras se carga el dibujo	
             g.drawString("No se cargo la imagen..", 20, 20);
         }
-        for (int i = 80; i < 900; i += 42) {
-            for (int j = 100; j < 300; j += 21) {
-                    g.drawImage(meth, i, j, this);
-            }
-        }
-        g.drawImage(titulo, tituloMov, 0, this);
-        g.drawImage(start, tituloMov + 600, 100, this);
 
     }
 
