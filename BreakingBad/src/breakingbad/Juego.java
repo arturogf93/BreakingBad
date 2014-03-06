@@ -115,7 +115,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
 
         titulo = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/titulo.png"));
         start = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/start3.gif"));
-        fondo = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/fondo.png"));
+        fondo = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/RV.jpg"));
         meth = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/meth.jpg"));
         empezar = false;
         tituloMov = 0;
@@ -443,6 +443,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
      * @param g es el <code>objeto grafico</code> usado para dibujar.
      */
     public void paint1(Graphics g) {
+        g.drawImage(fondo, 0, 0, this);
         if (heroe != null && bomba != null) {
             if (gameover) {
                 g.drawImage(im_over, 0, 30, this);
@@ -477,8 +478,8 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
                     g.drawImage(meth, i, j, this);
             }
         }
-        //g.drawImage(titulo, tituloMov, 0, this);
-        //g.drawImage(start, tituloMov + 600, 100, this);
+        g.drawImage(titulo, tituloMov, 0, this);
+        g.drawImage(start, tituloMov + 600, 100, this);
 
     }
 
