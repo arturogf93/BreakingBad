@@ -21,11 +21,11 @@ public class Bueno extends Base {
     //@param  posY es para saber la posicion y de tipo <code>int</code>
     public Bueno(int posX, int posY) {
         super(posX, posY);
-        Image link1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/link1.png"));
-        Image link2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/link2.png"));
-        Image link3 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/link3.png"));
-        Image link4 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/link4.png"));
-        Image link5 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/link5.png"));
+        Image link1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/hank.png"));
+        Image link2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/hank.png"));
+        Image link3 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/hank.png"));
+        Image link4 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/hank.png"));
+        Image link5 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/hank.png"));
         (this.getImagenes()).sumaCuadro(link1, 70);
         (this.getImagenes()).sumaCuadro(link2, 70);
         (this.getImagenes()).sumaCuadro(link3, 70);
@@ -48,8 +48,8 @@ public class Bueno extends Base {
     public void colision(int width, int height) {       //Metodo para saber si colisiono con el applet
         if (this.getPosX() + this.getWidth() >= width) {
             this.setPosX(width - this.getWidth());
-        } else if (this.getPosX() <= width / 2) {
-            this.setPosX(width / 2);
+        } else if (this.getPosX() <= 0) {
+            this.setPosX(0);
         }
     }
 }
