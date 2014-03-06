@@ -83,7 +83,9 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         movimiento = false;             // al principi esta quirto
         heroe = new Bueno(0, 0);
         bomba = new Malo(30, 330, 0, 0);
-        heroe.setPosX((this.getWidth() * 6) / 8 - (new ImageIcon(heroe.getImagen())).getIconWidth() / 2);   //posicion x del Bueno
+        bomba.setPosX((this.getWidth() / 2) - (new ImageIcon(bomba.getImagen())).getIconWidth() / 2);
+        bomba.setPosY(this.getHeight() - (new ImageIcon(heroe.getImagen())).getIconHeight() - 40);
+        heroe.setPosX((this.getWidth() / 2) - (new ImageIcon(heroe.getImagen())).getIconWidth() / 2);   //posicion x del Bueno
         heroe.setPosY(this.getHeight() - (new ImageIcon(heroe.getImagen())).getIconHeight() - 2);    //posicion y del Bueno
         addMouseListener(this);
         addMouseMotionListener(this);
