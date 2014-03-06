@@ -12,24 +12,24 @@ package breakingbad;
 import java.awt.Image;
 import java.awt.Toolkit;
 
-public class Malo extends Base {
+public class Pelota extends Base {
 
     private int cont;   //entero de contador
     private int velocidad;  //entero de velocidad
     private static int score;
 
-    public Malo(int posX, int posY, int cont, int velocidad) {
+    public Pelota(int posX, int posY, int cont, int velocidad) {
         super(posX, posY);
         this.velocidad = velocidad;
         this.cont = cont;
-        Image bomb1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/bomb1.png"));
-        Image bomb2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/bomb2.png"));
-        Image bomb3 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/bomb3.png"));
-        Image bomb4 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/bomb4.png"));
-        Image bomb5 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/bomb5.png"));
-        Image bomb6 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/bomb6.png"));
-        Image bomb7 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/bomb7.png"));
-        Image bomb8 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/bomb8.png"));
+        Image bomb1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/Bote1.png"));
+        Image bomb2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/Bote2.png"));
+        Image bomb3 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/Bote3.png"));
+        Image bomb4 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/Bote4.png"));
+        Image bomb5 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/Bote5.png"));
+        Image bomb6 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/Bote6.png"));
+        Image bomb7 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/Bote7.png"));
+        Image bomb8 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/Bote8.png"));
         (this.getImagenes()).sumaCuadro(bomb1, 70);
         (this.getImagenes()).sumaCuadro(bomb2, 70);
         (this.getImagenes()).sumaCuadro(bomb3, 70);

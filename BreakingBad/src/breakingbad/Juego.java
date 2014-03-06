@@ -21,6 +21,7 @@ import java.io.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.net.URL;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,12 +33,12 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
     }
 
     private Bueno heroe;                //Objeto tipo Bueno
-    private Malo bomba;                 //objeto tipo bomba
+    private Pelota bola;                 //objeto tipo bomba
     private Graphics dbg;               //Objeto tipo Graphics
     private Image dbImage;              //Imagen para el doblebuffer  
     private long tiempoActual;          //Long para el tiempo del applet
     private boolean movimiento;         //Booleano si esta en movimient
-    private boolean bombamueve;         //Booleano para saber si se mueve la bomba
+    private boolean bolamueve;         //Booleano para saber si se mueve la bomba
     private boolean pausa;              //Booleando para pausa
     private int direccion;              //entero para la direccion
     private SoundClip chCacha;          //audio para el heroe
@@ -65,6 +66,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
     private Image meth;
     private boolean empezar;
     private int tituloMov;
+    private LinkedList<Meth> cubos;
 
     /**
      * Metodo <I>init</I> sobrescrito de la clase <code>Applet</code>.<P>
@@ -73,6 +75,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
      */
     public void init() throws IOException {
         this.setSize(1024, 683);
+        cubos = new LinkedList();
         info = false;
         sound = true;
         gameover = false;
@@ -82,9 +85,9 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         setBackground(Color.BLACK);     //fondo negra
         movimiento = false;             // al principi esta quirto
         heroe = new Bueno(0, 0);
-        bomba = new Malo(30, 330, 0, 0);
-        bomba.setPosX((this.getWidth() / 2) - (new ImageIcon(bomba.getImagen())).getIconWidth() / 2);
-        bomba.setPosY(this.getHeight() - (new ImageIcon(heroe.getImagen())).getIconHeight() - 40);
+        bola = new Pelota(30, 330, 0, 0);
+        bola.setPosX((this.getWidth() / 2) - (new ImageIcon(bola.getImagen())).getIconWidth() / 2);
+        bola.setPosY(this.getHeight() - (new ImageIcon(heroe.getImagen())).getIconHeight() - 40);
         heroe.setPosX((this.getWidth() / 2) - (new ImageIcon(heroe.getImagen())).getIconWidth() / 2);   //posicion x del Bueno
         heroe.setPosY(this.getHeight() - (new ImageIcon(heroe.getImagen())).getIconHeight() - 2);    //posicion y del Bueno
         addMouseListener(this);
@@ -93,21 +96,9 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         chCacha = new SoundClip("Sounds/chocaHeroe.wav");
         //URL choURL = this.getClass().getResource("chocaPared.wav");
         chFalla = new SoundClip("Sounds/chocaPared.wav");
-        file = new FileWriter("hola.txt");
-        out = new PrintWriter(file);
-        archivo = new File("hola.txt");
-        fr = new FileReader(archivo);
-        br = new BufferedReader(fr);
         guarda = false;
         carga = false;
         arr = new int[12];
-        if ((int) (Math.random() * 2) == 1) {
-            vx = (int) (Math.random() * 3) + 17;
-            vy = -((int) (Math.random() * 4) + 15);
-        } else {
-            vx = (int) (Math.random() * 3) + 10;
-            vy = -((int) (Math.random() * 4) + 20);
-        }
         URL gURL = this.getClass().getResource("Images/Creditos.png");
         im_over = Toolkit.getDefaultToolkit().getImage(gURL);
         URL iURL = this.getClass().getResource("Images/Info.png");
@@ -116,9 +107,15 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         titulo = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/titulo.png"));
         start = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/start3.gif"));
         fondo = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/RV.jpg"));
-        meth = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/meth2.jpg"));
+        meth = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/meth.jpg"));
         empezar = false;
         tituloMov = 0;
+        
+        for (int i = 80; i < 900; i += 42) {
+            for (int j = 100; j < 300; j += 48) {
+                    cubos.add(new Meth(i,j));
+                }
+            }
     }
 
     public void start() {
@@ -138,11 +135,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
     public void run() {
         while (true) {
             if (!pausa) {
-                try {
-                    actualiza();
-                } catch (IOException ex) {
-                    Logger.getLogger(Juego.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                actualiza();
                 checaColision();
             }
             repaint();    // Se actualiza el <code>Applet</code> repintando el contenido.
@@ -159,7 +152,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
      * Metodo usado para actualizar la posicion de objetos elefante y raton.
      *
      */
-    public void actualiza() throws IOException {
+    public void actualiza() {
         //if(movimiento){
         long tiempoTranscurrido = System.currentTimeMillis() - tiempoActual;
 
@@ -167,123 +160,25 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         tiempoActual += tiempoTranscurrido;
 
         //Actualiza la animación en base al tiempo transcurrido
-        if (bombamueve && !info) {
-            (bomba.getImagenes()).actualiza(tiempoActual);
-            vy++;
-            bomba.setPosX(bomba.getPosX() + vx);
-            bomba.setPosY(bomba.getPosY() + vy);
+        if (bolamueve){
+            (bola.getImagenes()).actualiza(tiempoActual);
         }
-
+            
         if (movimiento) {//Si se mueve se actualiza
             (heroe.getImagenes()).actualiza(tiempoActual);
 
         }
         heroe.setPosX(heroe.getPosX() + direccion);
 
-        //Auqie empieza a guardad datos en el archivo
-        if (guarda && !info) {
-            //try {
-            file = new FileWriter("hola.txt");
-            out = new PrintWriter(file);
-            out.println(bomba.getPosX());
-            out.println(bomba.getPosY());
-            out.println(heroe.getPosX());
-            out.println(vy);
-            out.println(vx);
-            out.println(vidas);
-            out.println(contcaidas);
-            out.println(bomba.getScore());
-            if (bombamueve) {
-                out.println(1);
-            } else {
-                out.println(0);
-            }
-            if (sound) {
-                out.println(1);
-            } else {
-                out.println(0);
-            }
 
-            file.close();
-            guarda = false;
-        }
-        //Aqui termina de guardar datos
+        if (heroe.intersecta(bola)) {
 
-        //Aqui carga los datos del archivo
-        if (carga) {
-            // Se abre del archivo 
-            archivo = new File("hola.txt");
-            fr = new FileReader(archivo);
-            br = new BufferedReader(fr);
-            // Lectura del archivo
-            String linea;
-            int cont = 0;
-            while ((linea = br.readLine()) != null) {
-                System.out.println(linea);
-                int foo = Integer.parseInt(linea);
-                arr[cont] = foo;
-                cont++;
-            }
-            bomba.setPosX(arr[0]);
-            bomba.setPosY(arr[1]);
-            heroe.setPosX(arr[2]);
-            vy = arr[3];
-            vx = arr[4];
-            vidas = arr[5];
-            contcaidas = arr[6];
-            bomba.setScore(arr[7]);
-            if (arr[8] == 1) {
-                bombamueve = true;
-            } else {
-                bombamueve = false;
-            }
-            if (arr[9] == 1) {
-                sound = true;
-            } else {
-                sound = false;
-            }
-
-            //bombamueve = true;  //GRABA TAMBIEN EL SOUND y el BOMBAMUEVE
-        }
-        carga = false;
-        if (heroe.intersecta(bomba)) {
-            bomba.setPosX(30);
-            bomba.setPosY(330);
-            bombamueve = false;
-            if ((int) (Math.random() * 2) == 1) {
-                vx = (int) (Math.random() * 3) + 17;
-                vy = -((int) (Math.random() * 4) + 15);
-            } else {
-                vx = (int) (Math.random() * 3) + 10;
-                vy = -((int) (Math.random() * 4) + 20);
-            }
-            if (sound) {
-                chCacha.play();
-            }
-            bomba.setScore(bomba.getScore() + 2);
         }
 
         //cuando la bomba sale por abajo
-        if (bomba.getPosY() >= this.getHeight()) {
-
-            bomba.setPosX(30);
-            bomba.setPosY(330);
-            bombamueve = false;
-            if ((int) (Math.random() * 2) == 1) {
-                vx = (int) (Math.random() * 3) + 17;
-                vy = -((int) (Math.random() * 4) + 15);
-            } else {
-                vx = (int) (Math.random() * 3) + 10;
-                vy = -((int) (Math.random() * 4) + 20);
-            }
-            contcaidas++;
-            if (sound) {
-                chFalla.play();
-            }
-            if (contcaidas >= 3) {
-                vidas--;
-                contcaidas = 0;
-            }
+        if (bola.getPosY() >= this.getHeight()) {
+            vidas--;
+            
         }
         if (vidas <= 0) {
             gameover = true;
@@ -385,16 +280,6 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
                 pausa = true;
             }
         }
-        if (e.getKeyCode() == KeyEvent.VK_G) {  //dejo de presionar la tecla de arriba
-            if (!guarda) {
-                guarda = true;
-            }
-        }
-        if (e.getKeyCode() == KeyEvent.VK_C) {  //dejo de presionar la tecla de arriba
-            if (!carga) {
-                carga = true;
-            }
-        }
 
         if (e.getKeyCode() == KeyEvent.VK_S) {  //dejo de presionar la tecla de arriba
             if (!sound) {
@@ -419,13 +304,13 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
             direccion = 0;
         }
-        if (e.getKeyCode() == KeyEvent.VK_N) {
+        /*if (e.getKeyCode() == KeyEvent.VK_N) {
             if (vidas <= 0) {
                 vidas = 5;
-                bomba.setScore(0);
+                bola.setScore(0);
                 gameover = false;
             }
-        }
+        }*/
 
         if (e.getKeyCode() == KeyEvent.VK_E) {  //dejo de presionar la tecla de arriba
             if (!empezar) {
@@ -444,7 +329,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
      */
     public void paint1(Graphics g) {
         g.drawImage(fondo, 0, 0, this);
-        if (heroe != null && bomba != null && titulo != null) {
+        if (heroe != null && bola != null && titulo != null) {
             if (gameover) {
                 g.drawImage(im_over, 0, 30, this);
             } else {
@@ -453,14 +338,14 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
                 } else {
                     //Dibuja la imagen en la posicion actualizada
                     g.drawImage(heroe.getImagen(), heroe.getPosX(), heroe.getPosY(), this);
-                    g.drawImage(bomba.getImagen(), bomba.getPosX(), bomba.getPosY(), this);
+                    g.drawImage(bola.getImagen(), bola.getPosX(), bola.getPosY(), this);
 
                     if (pausa) {
                         g.setColor(Color.WHITE);
                         g.drawString("" + heroe.getPAUSADO(), heroe.getPosX() - heroe.getWidth() / 7, heroe.getPosY() + (heroe.getHeight() / 2));
                     }
                     g.setColor(Color.WHITE);
-                    g.drawString("Puntaje: " + bomba.getScore(), 20, 50);
+                    g.drawString("Puntaje: " + bola.getScore(), 20, 50);
                     g.drawString("Vidas    : " + vidas, 20, 65);
                 }
             }
@@ -469,13 +354,14 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
             } else {
                 g.drawString("Sonido OFF", this.getWidth() - 75, 50);
             }
-            for (int i = 80; i < 900; i += 42) {
-                for (int j = 100; j < 300; j += 48) {
-                    g.drawImage(meth, i, j, this);
-                }
+            for(int i = 0 ; i <cubos.size(); i++){
+                g.drawImage(((Meth) cubos.get(i)).getImagen(), ((Meth) cubos.get(i)).getPosX(), ((Meth) cubos.get(i)).getPosY(), this);
             }
-            g.drawImage(titulo, tituloMov, 0, this);
-            g.drawImage(start, tituloMov + 600, 100, this);
+            if (tituloMov < this.getWidth()){
+                g.drawImage(titulo, tituloMov, 0, this);
+                g.drawImage(start, tituloMov + 600, 100, this);
+            }
+            
         } else {
             //Da un mensaje mientras se carga el dibujo	
             g.drawString("No se cargo la imagen..", 20, 20);
@@ -486,8 +372,8 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
     public void mouseClicked(MouseEvent e) {
         int x = e.getX();
         int y = e.getY();
-        if (bomba.dentro(x, y)) { // se da clic dentro del heroe
-            bombamueve = true;
+        if (bola.dentro(x, y)) { // se da clic dentro del heroe
+            bolamueve = true;
         }
     }
 
