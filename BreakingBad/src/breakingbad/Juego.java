@@ -116,7 +116,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         titulo = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/titulo.png"));
         start = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/start3.gif"));
         fondo = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/RV.jpg"));
-        meth = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/meth.jpg"));
+        meth = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/meth2.jpg"));
         empezar = false;
         tituloMov = 0;
     }
@@ -470,7 +470,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
                 g.drawString("Sonido OFF", this.getWidth() - 75, 50);
             }
             for (int i = 80; i < 900; i += 42) {
-                for (int j = 100; j < 300; j += 21) {
+                for (int j = 100; j < 300; j += 48) {
                     g.drawImage(meth, i, j, this);
                 }
             }
