@@ -82,7 +82,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         vidas = 5;
         addKeyListener(this);
         direccion = 0;                  //Se inicializa a 0 la direccion (no se mueve)
-        setBackground(Color.BLACK);     //fondo negra
+        //setBackground(Color.BLACK);     //fondo negra
         movimiento = false;             // al principi esta quirto
         heroe = new Bueno(0, 0);
         bola = new Pelota(30, 330, 0, 0);
@@ -187,6 +187,16 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         if (empezar) {
             tituloMov += 10;
         }
+        
+        int vy=bola.getPosY();
+        if(bolamueve) {
+            vy--;
+            bola.setPosY(vy);
+        }
+        for(int i=0;i<cubos.size();i++)
+            if(cubos.get(i).intersecta(bola)) {
+                cubos.remove(i);
+            }
 
     }
 
