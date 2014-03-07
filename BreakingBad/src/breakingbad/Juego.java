@@ -64,6 +64,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
     private boolean info;               //flag para saber si se despliega la informacion
     private boolean inclinado;
     private boolean lanzada;
+    private boolean nivel1;
     private boolean nivel2;
     private boolean nivel3;
 
@@ -73,7 +74,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
      * usarse en el <code>Applet</code> y se definen funcionalidades.
      */
     public void init() {
-
+        nivel1=true;
         this.setSize(1024, 683);
         cubos = new LinkedList();
         cubos2 = new LinkedList();
@@ -128,15 +129,15 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         inclinado = false;
         //
 
-        for (int i = 80; i < 900; i += 52) {  //42 52
-            for (int j = 100; j < 300; j += 58) {   //48 58
+        for (int i = 80; i < 900; i += 62) {  //42 52
+            for (int j = 100; j < 300; j += 68) {   //48 58
                 cubos.add(new Meth(i, j));
             }
 
         }
 
-        for (int i = 80; i < 900; i += 104) {  //42
-            for (int j = 100; j < 300; j += 58) {   //48
+        for (int i = 80; i < 900; i += 82) {  //42
+            for (int j = 100; j < 300; j += 68) {   //48
                 cubos2.add(new Meth(i, j));
             }
 
@@ -306,6 +307,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
                 bola.setPosY(heroe.getPosY() - bola.getHeight());
                 bolamueve = false;
                 cont++;
+                nivel1=false;
             }
         }
 
@@ -478,7 +480,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             if (!lanzada) {
                 bolamueve = true;
-                vx = 3 + (int) Math.random() * 7;
+                vx = 4 + (int) Math.random() * 6;
                 if ((int) (Math.random() * 2) == 1) {
                     vx = -vx;
                 }
@@ -497,7 +499,15 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
      * @param g es el <code>objeto grafico</code> usado para dibujar.
      */
     public void paint1(Graphics g) {
-        g.drawImage(fondo, 0, 0, this);
+        if (nivel1){
+            g.drawImage(fondo, 0, 0, this);
+        }
+        if (nivel2){
+            g.drawImage(fondo, 0, 0, this);
+        }
+        if (nivel3){
+            g.drawImage(fondo, 0, 0, this);
+        }
         if (heroe != null && bola != null && titulo != null) {
             if (gameover) {
                 g.drawImage(im_over, 0, 30, this);
