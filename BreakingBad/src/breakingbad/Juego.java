@@ -20,7 +20,6 @@ import java.awt.event.MouseMotionListener;
 import java.io.*;
 import java.net.URL;
 import java.util.LinkedList;
-import java.awt.Font;
 
 public class Juego extends JFrame implements Runnable, KeyListener, MouseListener, MouseMotionListener {
 
@@ -33,6 +32,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
     private Pelota bola;                 //objeto tipo bomba
     private Graphics dbg;               //Objeto tipo Graphics
     private Image dbImage;              //Imagen para el doblebuffer  
+    private Poderes poder;
     private long tiempoActual;          //Long para el tiempo del applet
     private SoundClip chCacha;          //audio para el heroe
     private SoundClip chFalla;          //audio para las paredes
@@ -47,6 +47,8 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
     private Image boss;
     private LinkedList<Meth> cubos;
     private LinkedList<Meth> cubos2;
+    private long timer;
+    private String letrero;
 
     private int tituloMov;
     private int direccion;              //entero para la direccion
@@ -54,7 +56,8 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
     private int vx;                     //velocidad en x
     private int vy;                     //velocidad en
     private int cont;
-
+    private int randompoder;
+    
     private boolean movimiento;         //Booleano si esta en movimient
     private boolean bolamueve;         //Booleano para saber si se mueve la bomba
     private boolean pausa;              //Booleando para pausa
@@ -67,6 +70,13 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
     private boolean nivel1;
     private boolean nivel2;
     private boolean nivel3;
+    private boolean caer;
+    private int tipo1;
+    private int tipo2;
+    private boolean tipo3;
+    private int decision;
+    private boolean letr;
+    private boolean poderactivo;
 
     /**
      * Metodo <I>init</I> sobrescrito de la clase <code>Applet</code>.<P>
@@ -74,7 +84,15 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
      * usarse en el <code>Applet</code> y se definen funcionalidades.
      */
     public void init() {
-        nivel1=true;
+        decision = -1;
+        poderactivo = false;
+        letr = false;
+        tipo1 = 1;
+        tipo2 = 1;
+        poder = new Poderes(-100, -100, 0);
+        caer = false;
+        randompoder = 0;
+        nivel1 = true;
         this.setSize(1024, 683);
         cubos = new LinkedList();
         cubos2 = new LinkedList();
@@ -198,9 +216,9 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
             (heroe.getImagenes()).actualiza(tiempoActual);
 
         }
-        heroe.setPosX(heroe.getPosX() + direccion);
+        heroe.setPosX(heroe.getPosX() + direccion * tipo1);
         if (!lanzada) {
-            bola.setPosX(bola.getPosX() + direccion);
+            bola.setPosX(bola.getPosX() + direccion * tipo1);
         }
         if (heroe.intersecta(bola)) {
             vy = -vy;
@@ -253,6 +271,9 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
 
         //cuando la bomba sale por abajo
         if (bola.getPosY() >= this.getHeight()) {
+            if (sound) {
+                chFalla.play();
+            }
             vidas--;
             lanzada = false;
             bolamueve = false;
@@ -266,6 +287,35 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
             vy = -vy;
         }
 
+        if (caer) {
+            (poder.getImagenes()).actualiza(tiempoActual);
+            poder.setPosY(poder.getPosY() + poder.getVelocidad());
+            if (poder.intersecta(heroe)) {
+                letr=true;
+                poderactivo = true;
+                timer = 0;
+                decision = ((int) (Math.random() * 3));
+                if (decision == 0) {
+                    tipo1 = 2;
+                    letrero = "Velocidad Aumentada";
+                }
+                if (decision == 1) {
+                    tipo2 = 2;
+                    letrero = "Puntaje al Doble";
+                }
+                if (decision == 2) {
+                    vidas++;
+                    letrero = "Vida Extra";
+                    tipo3=true;
+                }
+            }
+            if (poder.intersecta(heroe) || poder.getPosY() > this.getHeight()) {
+                caer = false;
+                poder.setPosX(-100);
+                poder.setPosY(-100);
+                poder.setVelocidad(0);
+            }
+        }
         if (vidas <= 0) {
             gameover = true;
         }
@@ -290,13 +340,19 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
                 if (centrox > actual.getPosX() + actual.getWidth() && vx < 0) {
                     vx = -vx;
                 }
-                cubos.remove(i);
 
+                randompoder = ((int) (Math.random() * 6));
+                if (randompoder == 1 && !caer &&!poderactivo) {
+                    caer = true;
+                    poder.setPosX(actual.getPosX() + 5);
+                    poder.setPosY(actual.getPosY() + 5);
+                    poder.setVelocidad(2);
+                }
                 if (sound) {
                     chCacha.play();
                 }
-                bola.setScore(bola.getScore() + 10);
-
+                bola.setScore(bola.getScore() + 10 * tipo2);
+                cubos.remove(i);
             }
         }
         if (cont == 0) {
@@ -307,7 +363,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
                 bola.setPosY(heroe.getPosY() - bola.getHeight());
                 bolamueve = false;
                 cont++;
-                nivel1=false;
+                nivel1 = false;
             }
         }
 
@@ -329,6 +385,13 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
                     if (centrox > actual.getPosX() + actual.getWidth() && vx < 0) {
                         vx = -vx;
                     }
+                    randompoder = ((int) (Math.random() * 7));
+                    if (randompoder == 4 && !caer) {
+                        caer = true;
+                        poder.setPosX(actual.getPosX() + 5);
+                        poder.setPosY(actual.getPosY() + 5);
+                        poder.setVelocidad(2);
+                    }
                     cubos2.remove(i);
                     if (sound) {
                         chCacha.play();
@@ -347,6 +410,19 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
             bolamueve = false;
         }
 
+        if (timer < 750 && poderactivo) {
+            timer += 1;
+            if(tipo3&&timer >100){
+                poderactivo=false;
+            }
+        } else {
+            timer = 0;
+            poderactivo = false;
+            letr=false;
+            tipo1=1;
+            tipo2=1;
+            tipo3=false;
+        }
     }
 
     /**
@@ -402,11 +478,11 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         // Presiono izq
         if (e.getKeyCode() == KeyEvent.VK_LEFT) {
             movimiento = true;
-            direccion = -5;
+            direccion = -6;
         } //Presiono der
         else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
             movimiento = true;
-            direccion = 5;
+            direccion = 6;
         }
     }
 
@@ -480,11 +556,11 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             if (!lanzada) {
                 bolamueve = true;
-                vx = 4 + (int) Math.random() * 6;
+                vx = 4 + (int) (Math.random() * 2);
                 if ((int) (Math.random() * 2) == 1) {
                     vx = -vx;
                 }
-                vy = -1 * (6 + (int) Math.random() * 12);
+                vy = -1 * (5 + (int) (Math.random() * 2));
                 lanzada = true;
             }
         }
@@ -499,13 +575,13 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
      * @param g es el <code>objeto grafico</code> usado para dibujar.
      */
     public void paint1(Graphics g) {
-        if (nivel1){
+        if (nivel1) {
             g.drawImage(fondo, 0, 0, this);
         }
-        if (nivel2){
+        if (nivel2) {
             g.drawImage(fondo, 0, 0, this);
         }
-        if (nivel3){
+        if (nivel3) {
             g.drawImage(fondo, 0, 0, this);
         }
         if (heroe != null && bola != null && titulo != null) {
@@ -531,7 +607,14 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
                             g.drawImage(((Meth) cubos.get(i)).getImagen(), ((Meth) cubos.get(i)).getPosX(), ((Meth) cubos.get(i)).getPosY(), this);
                         }
                     }
-
+                    if (caer) {
+                        g.drawImage(poder.getImagen(), poder.getPosX(), poder.getPosY(), this);
+                    }
+                    if (letr){
+                        g.setColor(Color.BLACK);
+                        g.drawString(letrero, (this.getWidth()/2)-30, this.getHeight()/2);
+                        g.setColor(Color.WHITE);
+                    }
                     if (nivel2) {
                         for (int i = 0; i < cubos2.size(); i++) {
                             g.drawImage(((Meth) cubos2.get(i)).getImagen(), ((Meth) cubos2.get(i)).getPosX(), ((Meth) cubos2.get(i)).getPosY(), this);
