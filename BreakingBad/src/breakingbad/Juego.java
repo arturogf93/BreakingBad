@@ -148,14 +148,14 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         inclinado = false;
         //
 
-        for (int i = 80; i < 900; i += 62) {  //42 52
+        for (int i = 80; i < this.getWidth()-80; i += 92) {  //42 52
             for (int j = 100; j < 300; j += 68) {   //48 58
                 cubos.add(new Meth(i, j));
             }
 
         }
 
-        for (int i = 80; i < 900; i += 82) {  //42
+        for (int i = 80; i < this.getWidth()-80; i += 52) {  //42
             for (int j = 100; j < 300; j += 68) {   //48
                 cubos2.add(new Meth(i, j));
             }
@@ -283,8 +283,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
             }
         }
 
-        
-        if (cubos2.isEmpty()) {
+        if (cubos2.isEmpty()&&!nivel3) {
             nivel3 = true;
             lanzada = false;
             bola.setPosX(heroe.getPosX() + heroe.getWidth() / 2 - (bola.getWidth() / 2));
@@ -606,8 +605,8 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
                         g.drawString("" + heroe.getPAUSADO(), heroe.getPosX() - heroe.getWidth() / 7, heroe.getPosY() + (heroe.getHeight() / 2));
                     }
                     g.setColor(Color.WHITE);
-                    g.drawString("Puntaje: " + bola.getScore(), 20, 50);
-                    g.drawString("Vidas    : " + vidas, 20, 65);
+                    g.drawString("Puntaje: " + bola.getScore(), 20, 60);
+                    g.drawString("Vidas    : " + vidas, 20, 90);
                     if (!nivel2) {
                         for (int i = 0; i < cubos.size(); i++) {
                             g.drawImage(((Meth) cubos.get(i)).getImagen(), ((Meth) cubos.get(i)).getPosX(), ((Meth) cubos.get(i)).getPosY(), this);
@@ -618,7 +617,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
                     }
                     if (letr){
                         g.setColor(Color.BLACK);
-                        g.drawString(letrero, (this.getWidth()/2)-30, this.getHeight()/2);
+                        g.drawString(letrero, (this.getWidth()/2)-70, this.getHeight()/2);
                         g.setColor(Color.WHITE);
                     }
                     if (nivel2) {
@@ -635,9 +634,9 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
 
             }
             if (sound) {
-                g.drawString("Sonido ON", this.getWidth() - 75, 50);
+                g.drawString("Sonido ON", this.getWidth() - 180, 60);
             } else {
-                g.drawString("Sonido OFF", this.getWidth() - 75, 50);
+                g.drawString("Sonido OFF", this.getWidth() - 180, 60);
             }
 
         } else {
