@@ -21,16 +21,14 @@ public class Bueno extends Base {
     //@param  posY es para saber la posicion y de tipo <code>int</code>
     public Bueno(int posX, int posY) {
         super(posX, posY);
-        Image link1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/hankgomez.png"));
-        Image link2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/hankgomez.png"));
-        Image link3 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/hankgomez.png"));
-        Image link4 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/hankgomez.png"));
-        Image link5 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/hankgomez.png"));
-        (this.getImagenes()).sumaCuadro(link1, 70);
-        (this.getImagenes()).sumaCuadro(link2, 70);
-        (this.getImagenes()).sumaCuadro(link3, 70);
-        (this.getImagenes()).sumaCuadro(link4, 70);
-        (this.getImagenes()).sumaCuadro(link5, 70);
+        Image rv1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/RV1.png"));
+        Image rv2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/RV2.png"));
+        Image rv3 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/RV3.png"));
+        Image rv4 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/RV3.png"));
+        (this.getImagenes()).sumaCuadro(rv1, 70);
+        (this.getImagenes()).sumaCuadro(rv2, 70);
+        (this.getImagenes()).sumaCuadro(rv3, 70);
+        (this.getImagenes()).sumaCuadro(rv4, 70);
     }
 
     //@return    regresa DESAPARECE de tipo <code>String</code>
