@@ -48,6 +48,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
     private Image boss;
     private LinkedList<Meth> cubos;
     private LinkedList<Meth> cubos2;
+    private LinkedList<int> golpes;
     private long timer;
     private String letrero;
 
@@ -85,6 +86,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
      * usarse en el <code>Applet</code> y se definen funcionalidades.
      */
     public void init() {
+        golpes = new LinkedList();
         decision = -1;
         poderactivo = false;
         letr = false;
@@ -221,6 +223,178 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         if (!lanzada) {
             bola.setPosX(bola.getPosX() + direccion * tipo1);
         }
+        
+
+        //cuando la bomba sale por abajo
+        if (bola.getPosY() >= this.getHeight()) {
+            if (sound) {
+                chFalla.play();
+            }
+            vidas--;
+            lanzada = false;
+            bolamueve = false;
+            bola.setPosX(heroe.getPosX() + heroe.getWidth() / 2 - (bola.getWidth() / 2));
+            bola.setPosY(heroe.getPosY() - bola.getHeight());
+        }
+        if (bola.getWidth() + bola.getPosX() >= this.getWidth() || bola.getPosX() < 0) {
+            vx = -vx;
+        }
+        if (bola.getPosY() < 0) {
+            vy = -vy;
+        }
+
+        if (caer) {
+            (poder.getImagenes()).actualiza(tiempoActual);
+            poder.setPosY(poder.getPosY() + poder.getVelocidad());
+            if (poder.intersecta(heroe)) {
+                letr=true;
+                poderactivo = true;
+                timer = 0;
+                decision = ((int) (Math.random() * 3));
+                if (decision == 0) {
+                    tipo1 = 2;
+                    letrero = "Velocidad Aumentada";
+                }
+                if (decision == 1) {
+                    tipo2 = 2;
+                    letrero = "Puntaje al Doble";
+                }
+                if (decision == 2) {
+                    vidas++;
+                    letrero = "Vida Extra";
+                    tipo3=true;
+                }
+            }
+        }
+        if (vidas <= 0) {
+            gameover = true;
+        }
+
+        if (empezar) {
+            tituloMov += 10;
+        }
+        if (cont == 0) {
+            if (cubos.isEmpty()) {
+                nivel2 = true;
+                lanzada = false;
+                bola.setPosX(heroe.getPosX() + heroe.getWidth() / 2 - (bola.getWidth() / 2));
+                bola.setPosY(heroe.getPosY() - bola.getHeight());
+                bolamueve = false;
+                cont++;
+                nivel1 = false;
+            }
+        }
+
+        
+        if (cubos2.isEmpty()) {
+            nivel3 = true;
+            lanzada = false;
+            bola.setPosX(heroe.getPosX() + heroe.getWidth() / 2 - (bola.getWidth() / 2));
+            bola.setPosY(heroe.getPosY() - bola.getHeight());
+            bolamueve = false;
+        }
+
+        if (timer < 750 && poderactivo) {
+            timer += 1;
+            if(tipo3&&timer >100){
+                poderactivo=false;
+            }
+        } else {
+            timer = 0;
+            poderactivo = false;
+            letr=false;
+            tipo1=1;
+            tipo2=1;
+            tipo3=false;
+        }
+    }
+
+    /**
+     * Metodo usado para checar las colisiones del objeto elefante y raton con
+     * las orillas del <code>Applet</code>.
+     */
+    public void checaColision() {
+        heroe.colision(this.getWidth(), this.getHeight());        //Checa colision del heroe con el applet
+        if (direccion != 0) {
+            movimiento = true;
+        } else {
+            movimiento = false;
+        }
+        
+        if (nivel2) {
+            for (int i = 0; i < cubos2.size(); i++) {
+                Meth actual = (Meth) cubos2.get(i);
+                if (actual.intersecta(bola)) {
+                    int centrox = bola.getPosX() + (bola.getWidth() / 2);
+                    int centroy = bola.getPosY() + (bola.getHeight() / 2);
+                    if (centroy < actual.getPosY() && vy > 0) {
+                        vy = -vy;
+                    }
+                    if (centroy > actual.getPosY() + actual.getHeight() && vy < 0) {
+                        vy = -vy;
+                    }
+                    if (centrox < actual.getPosX() && vx > 0) {
+                        vx = -vx;
+                    }
+                    if (centrox > actual.getPosX() + actual.getWidth() && vx < 0) {
+                        vx = -vx;
+                    }
+                    randompoder = ((int) (Math.random() * 7));
+                    if (randompoder == 4 && !caer) {
+                        caer = true;
+                        poder.setPosX(actual.getPosX() + 5);
+                        poder.setPosY(actual.getPosY() + 5);
+                        poder.setVelocidad(2);
+                    }
+                    cubos2.remove(i);
+                    if (sound) {
+                        chCacha.play();
+                    }
+                    bola.setScore(bola.getScore() + 10);
+
+                }
+            }
+        }
+        if (nivel1){
+            for (int i = 0; i < cubos.size(); i++) {
+                Meth actual = (Meth) cubos.get(i);
+                if (actual.intersecta(bola)) {
+                    int centrox = bola.getPosX() + (bola.getWidth() / 2);
+                    int centroy = bola.getPosY() + (bola.getHeight() / 2);
+                    if (centroy < actual.getPosY() && vy > 0) {
+                        vy = -vy;
+                    }
+                    if (centroy > actual.getPosY() + actual.getHeight() && vy < 0) {
+                        vy = -vy;
+                    }
+                    if (centrox < actual.getPosX() && vx > 0) {
+                        vx = -vx;
+                    }
+                    if (centrox > actual.getPosX() + actual.getWidth() && vx < 0) {
+                        vx = -vx;
+                    }
+
+                    randompoder = ((int) (Math.random() * 6));
+                    if (randompoder == 1 && !caer &&!poderactivo) {
+                        caer = true;
+                        poder.setPosX(actual.getPosX() + 5);
+                        poder.setPosY(actual.getPosY() + 5);
+                        poder.setVelocidad(2);
+                    }
+                    if (sound) {
+                        chCacha.play();
+                    }
+                    bola.setScore(bola.getScore() + 10 * tipo2);
+                    cubos.remove(i);
+                }
+            }
+        }
+        if (poder.intersecta(heroe) || poder.getPosY() > this.getHeight()) {
+            caer = false;
+            poder.setPosX(-100);
+            poder.setPosY(-100);
+            poder.setVelocidad(0);
+            }
         if (heroe.intersecta(bola)) {
             vy = -vy;
             int centro = bola.getPosX() + (bola.getWidth() / 2);
@@ -270,173 +444,6 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
             }
         }
 
-        //cuando la bomba sale por abajo
-        if (bola.getPosY() >= this.getHeight()) {
-            if (sound) {
-                chFalla.play();
-            }
-            vidas--;
-            lanzada = false;
-            bolamueve = false;
-            bola.setPosX(heroe.getPosX() + heroe.getWidth() / 2 - (bola.getWidth() / 2));
-            bola.setPosY(heroe.getPosY() - bola.getHeight());
-        }
-        if (bola.getWidth() + bola.getPosX() >= this.getWidth() || bola.getPosX() < 0) {
-            vx = -vx;
-        }
-        if (bola.getPosY() < 0) {
-            vy = -vy;
-        }
-
-        if (caer) {
-            (poder.getImagenes()).actualiza(tiempoActual);
-            poder.setPosY(poder.getPosY() + poder.getVelocidad());
-            if (poder.intersecta(heroe)) {
-                letr=true;
-                poderactivo = true;
-                timer = 0;
-                decision = ((int) (Math.random() * 3));
-                if (decision == 0) {
-                    tipo1 = 2;
-                    letrero = "Velocidad Aumentada";
-                }
-                if (decision == 1) {
-                    tipo2 = 2;
-                    letrero = "Puntaje al Doble";
-                }
-                if (decision == 2) {
-                    vidas++;
-                    letrero = "Vida Extra";
-                    tipo3=true;
-                }
-            }
-            if (poder.intersecta(heroe) || poder.getPosY() > this.getHeight()) {
-                caer = false;
-                poder.setPosX(-100);
-                poder.setPosY(-100);
-                poder.setVelocidad(0);
-            }
-        }
-        if (vidas <= 0) {
-            gameover = true;
-        }
-
-        if (empezar) {
-            tituloMov += 10;
-        }
-        for (int i = 0; i < cubos.size(); i++) {
-            Meth actual = (Meth) cubos.get(i);
-            if (actual.intersecta(bola)) {
-                int centrox = bola.getPosX() + (bola.getWidth() / 2);
-                int centroy = bola.getPosY() + (bola.getHeight() / 2);
-                if (centroy < actual.getPosY() && vy > 0) {
-                    vy = -vy;
-                }
-                if (centroy > actual.getPosY() + actual.getHeight() && vy < 0) {
-                    vy = -vy;
-                }
-                if (centrox < actual.getPosX() && vx > 0) {
-                    vx = -vx;
-                }
-                if (centrox > actual.getPosX() + actual.getWidth() && vx < 0) {
-                    vx = -vx;
-                }
-
-                randompoder = ((int) (Math.random() * 6));
-                if (randompoder == 1 && !caer &&!poderactivo) {
-                    caer = true;
-                    poder.setPosX(actual.getPosX() + 5);
-                    poder.setPosY(actual.getPosY() + 5);
-                    poder.setVelocidad(2);
-                }
-                if (sound) {
-                    chCacha.play();
-                }
-                bola.setScore(bola.getScore() + 10 * tipo2);
-                cubos.remove(i);
-            }
-        }
-        if (cont == 0) {
-            if (cubos.isEmpty()) {
-                nivel2 = true;
-                lanzada = false;
-                bola.setPosX(heroe.getPosX() + heroe.getWidth() / 2 - (bola.getWidth() / 2));
-                bola.setPosY(heroe.getPosY() - bola.getHeight());
-                bolamueve = false;
-                cont++;
-                nivel1 = false;
-            }
-        }
-
-        if (nivel2) {
-            for (int i = 0; i < cubos2.size(); i++) {
-                Meth actual = (Meth) cubos2.get(i);
-                if (actual.intersecta(bola)) {
-                    int centrox = bola.getPosX() + (bola.getWidth() / 2);
-                    int centroy = bola.getPosY() + (bola.getHeight() / 2);
-                    if (centroy < actual.getPosY() && vy > 0) {
-                        vy = -vy;
-                    }
-                    if (centroy > actual.getPosY() + actual.getHeight() && vy < 0) {
-                        vy = -vy;
-                    }
-                    if (centrox < actual.getPosX() && vx > 0) {
-                        vx = -vx;
-                    }
-                    if (centrox > actual.getPosX() + actual.getWidth() && vx < 0) {
-                        vx = -vx;
-                    }
-                    randompoder = ((int) (Math.random() * 7));
-                    if (randompoder == 4 && !caer) {
-                        caer = true;
-                        poder.setPosX(actual.getPosX() + 5);
-                        poder.setPosY(actual.getPosY() + 5);
-                        poder.setVelocidad(2);
-                    }
-                    cubos2.remove(i);
-                    if (sound) {
-                        chCacha.play();
-                    }
-                    bola.setScore(bola.getScore() + 10);
-
-                }
-            }
-        }
-
-        if (cubos2.isEmpty()) {
-            nivel3 = true;
-            lanzada = false;
-            bola.setPosX(heroe.getPosX() + heroe.getWidth() / 2 - (bola.getWidth() / 2));
-            bola.setPosY(heroe.getPosY() - bola.getHeight());
-            bolamueve = false;
-        }
-
-        if (timer < 750 && poderactivo) {
-            timer += 1;
-            if(tipo3&&timer >100){
-                poderactivo=false;
-            }
-        } else {
-            timer = 0;
-            poderactivo = false;
-            letr=false;
-            tipo1=1;
-            tipo2=1;
-            tipo3=false;
-        }
-    }
-
-    /**
-     * Metodo usado para checar las colisiones del objeto elefante y raton con
-     * las orillas del <code>Applet</code>.
-     */
-    public void checaColision() {
-        heroe.colision(this.getWidth(), this.getHeight());        //Checa colision del heroe con el applet
-        if (direccion != 0) {
-            movimiento = true;
-        } else {
-            movimiento = false;
-        }
 
         //bomba.colision(this.getHeight(), this.getHeight());
     }
@@ -479,11 +486,11 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         // Presiono izq
         if (e.getKeyCode() == KeyEvent.VK_LEFT) {
             movimiento = true;
-            direccion = -6;
+            direccion = -7;
         } //Presiono der
         else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
             movimiento = true;
-            direccion = 6;
+            direccion = 7;
         }
     }
 
@@ -666,7 +673,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
     public void mouseDragged(MouseEvent e) {
 
     }
-
+ 
     public void mouseMoved(MouseEvent e) {
 
     }
