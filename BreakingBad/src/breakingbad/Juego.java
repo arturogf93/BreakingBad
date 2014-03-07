@@ -48,7 +48,6 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
     private Image boss;
     private LinkedList<Meth> cubos;
     private LinkedList<Meth> cubos2;
-    private LinkedList<int> golpes;
     private long timer;
     private String letrero;
 
@@ -86,7 +85,6 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
      * usarse en el <code>Applet</code> y se definen funcionalidades.
      */
     public void init() {
-        golpes = new LinkedList();
         decision = -1;
         poderactivo = false;
         letr = false;
