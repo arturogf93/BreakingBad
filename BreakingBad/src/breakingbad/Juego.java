@@ -124,7 +124,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         boss = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/boss.jpg"));
         URL gURL = this.getClass().getResource("Images/Creditos.png");
         im_over = Toolkit.getDefaultToolkit().getImage(gURL);
-        URL iURL = this.getClass().getResource("Images/Info.png");
+        URL iURL = this.getClass().getResource("Images/info.jpg");
         informacion = Toolkit.getDefaultToolkit().getImage(iURL);
        //
 
@@ -629,6 +629,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
                     if (tituloMov < this.getWidth()) {
                         g.drawImage(titulo, tituloMov, 0, this);
                         g.drawImage(start, tituloMov + 600, 100, this);
+                        g.drawString("Presione -e- para empezar", tituloMov + 625, 300);
                     }
                 }
 
