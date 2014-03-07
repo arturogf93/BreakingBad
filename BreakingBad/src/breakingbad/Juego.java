@@ -295,6 +295,10 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
 
         if (cubos.isEmpty()) {
             nivel2 = true;
+            lanzada=false;
+            bola.setPosX(heroe.getPosX() + heroe.getWidth() / 2 - (bola.getWidth() / 2));
+            bola.setPosY(heroe.getPosY() - bola.getHeight());
+            bolamueve=false;
         }
 
         if (nivel2) {
