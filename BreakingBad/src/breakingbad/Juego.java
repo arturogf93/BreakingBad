@@ -128,8 +128,8 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         inclinado = false;
         //
 
-        for (int i = 80; i < 900; i += 852) {  //42 52
-            for (int j = 100; j < 300; j += 258) {   //48 58
+        for (int i = 80; i < 900; i += 52) {  //42 52
+            for (int j = 100; j < 300; j += 58) {   //48 58
                 cubos.add(new Meth(i, j));
             }
 
