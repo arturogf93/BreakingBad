@@ -20,6 +20,7 @@ import java.awt.event.MouseMotionListener;
 import java.io.*;
 import java.net.URL;
 import java.util.LinkedList;
+import java.awt.Font;
 
 public class Juego extends JFrame implements Runnable, KeyListener, MouseListener, MouseMotionListener {
 
@@ -42,6 +43,8 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
     private Image fondo;
     private Image meth;
     private Image meth2;
+    private Image fin;
+    private Image boss;
     private LinkedList<Meth> cubos;
     private LinkedList<Meth> cubos2;
 
@@ -62,6 +65,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
     private boolean inclinado;
     private boolean lanzada;
     private boolean nivel2;
+    private boolean nivel3;
 
     /**
      * Metodo <I>init</I> sobrescrito de la clase <code>Applet</code>.<P>
@@ -96,6 +100,8 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         start = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/start3.gif"));
         fondo = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/RV.jpg"));
         meth = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/meth.jpg"));
+        fin = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/gameover.gif"));
+        boss = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/boss.jpg"));
         URL gURL = this.getClass().getResource("Images/Creditos.png");
         im_over = Toolkit.getDefaultToolkit().getImage(gURL);
         URL iURL = this.getClass().getResource("Images/Info.png");
@@ -117,12 +123,13 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         movimiento = false;             // al principi esta quirto
         empezar = false;
         nivel2 = false;
+        nivel3 = false;
         lanzada = false;
         inclinado = false;
         //
 
-        for (int i = 80; i < 900; i += 52) {  //42 52
-            for (int j = 100; j < 300; j += 58) {   //48 58
+        for (int i = 80; i < 900; i += 852) {  //42 52
+            for (int j = 100; j < 300; j += 258) {   //48 58
                 cubos.add(new Meth(i, j));
             }
 
@@ -134,7 +141,6 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
             }
 
         }
-        
 
     }
 
@@ -292,13 +298,15 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
 
             }
         }
-
-        if (cubos.isEmpty()) {
-            nivel2 = true;
-            lanzada=false;
-            bola.setPosX(heroe.getPosX() + heroe.getWidth() / 2 - (bola.getWidth() / 2));
-            bola.setPosY(heroe.getPosY() - bola.getHeight());
-            bolamueve=false;
+        if (cont == 0) {
+            if (cubos.isEmpty()) {
+                nivel2 = true;
+                lanzada = false;
+                bola.setPosX(heroe.getPosX() + heroe.getWidth() / 2 - (bola.getWidth() / 2));
+                bola.setPosY(heroe.getPosY() - bola.getHeight());
+                bolamueve = false;
+                cont++;
+            }
         }
 
         if (nivel2) {
@@ -328,7 +336,15 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
                 }
             }
         }
-        
+
+        if (cubos2.isEmpty()) {
+            nivel3 = true;
+            lanzada = false;
+            bola.setPosX(heroe.getPosX() + heroe.getWidth() / 2 - (bola.getWidth() / 2));
+            bola.setPosY(heroe.getPosY() - bola.getHeight());
+            bolamueve = false;
+        }
+
     }
 
     /**
@@ -530,6 +546,12 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
             g.drawString("No se cargo la imagen..", 20, 20);
         }
 
+        if (nivel3) {
+            g.drawImage(boss, 500, 200, this);
+
+        }
+
+        //g.setFont(new Font("TimesRoman", Font.PLAIN, 20));         
     }
 
     public void mouseClicked(MouseEvent e) {
