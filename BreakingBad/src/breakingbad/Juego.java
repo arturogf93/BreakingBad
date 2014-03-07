@@ -33,29 +33,35 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
     private Graphics dbg;               //Objeto tipo Graphics
     private Image dbImage;              //Imagen para el doblebuffer  
     private long tiempoActual;          //Long para el tiempo del applet
-    private boolean movimiento;         //Booleano si esta en movimient
-    private boolean bolamueve;         //Booleano para saber si se mueve la bomba
-    private boolean pausa;              //Booleando para pausa
-    private int direccion;              //entero para la direccion
     private SoundClip chCacha;          //audio para el heroe
     private SoundClip chFalla;          //audio para las paredes
-    private int vidas;                  //entero para las vidas
-    private int vx;                     //velocidad en x
-    private int vy;                     //velocidad en y
-    private boolean gameover;           //flag para el gameover
     private Image im_over;              //imagen del gameover
-    private boolean sound;              //flag para saber si se hace sonido
     private Image informacion;          //imagen de la informacion
-    private boolean info;               //flag para saber si se despliega la informacion
     private Image titulo;
     private Image start;
     private Image fondo;
     private Image meth;
-    private boolean empezar;
-    private int tituloMov;
+    private Image meth2;
     private LinkedList<Meth> cubos;
+    private LinkedList<Meth> cubos2;
+
+    private int tituloMov;
+    private int direccion;              //entero para la direccion
+    private int vidas;                  //entero para las vidas
+    private int vx;                     //velocidad en x
+    private int vy;                     //velocidad en
+    private int cont;
+
+    private boolean movimiento;         //Booleano si esta en movimient
+    private boolean bolamueve;         //Booleano para saber si se mueve la bomba
+    private boolean pausa;              //Booleando para pausa
+    private boolean gameover;           //flag para el gameover
+    private boolean empezar;
+    private boolean sound;              //flag para saber si se hace sonido
+    private boolean info;               //flag para saber si se despliega la informacion
     private boolean inclinado;
     private boolean lanzada;
+    private boolean nivel2;
 
     /**
      * Metodo <I>init</I> sobrescrito de la clase <code>Applet</code>.<P>
@@ -63,12 +69,10 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
      * usarse en el <code>Applet</code> y se definen funcionalidades.
      */
     public void init() {
-        lanzada = false;
-        inclinado = false;
-        vx = 0;
-        vy = 0;
+
         this.setSize(1024, 683);
         cubos = new LinkedList();
+        cubos2 = new LinkedList();
         addKeyListener(this);
         addMouseListener(this);
         addMouseMotionListener(this);
@@ -79,9 +83,8 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         heroe = new Bueno(0, 0);
         heroe.setPosX((this.getWidth() / 2) - (new ImageIcon(heroe.getImagen())).getIconWidth() / 2);   //posicion x del Bueno
         heroe.setPosY(this.getHeight() - (new ImageIcon(heroe.getImagen())).getIconHeight() - 2);    //posicion y del Bueno
-        bola.setPosX(heroe.getPosX()+heroe.getWidth()/2-(bola.getWidth()/2));
-        bola.setPosY(heroe.getPosY()-bola.getHeight());
-
+        bola.setPosX(heroe.getPosX() + heroe.getWidth() / 2 - (bola.getWidth() / 2));
+        bola.setPosY(heroe.getPosY() - bola.getHeight());
 
         //Sonidos
         chCacha = new SoundClip("Sounds/chocaHeroe.wav");
@@ -103,6 +106,8 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         vidas = 3;
         direccion = 0;                  //Se inicializa a 0 la direccion (no se mueve)
         tituloMov = 0;
+        vx = 0;
+        vy = 0;
         //
 
         //booleans
@@ -111,13 +116,26 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         gameover = false;
         movimiento = false;             // al principi esta quirto
         empezar = false;
+        nivel2 = false;
+        lanzada = false;
+        inclinado = false;
         //
 
-        for (int i = 80; i < 900; i += 52) {  //42
-            for (int j = 100; j < 300; j += 58) {   //48
+        for (int i = 80; i < 900; i += 52) {  //42 52
+            for (int j = 100; j < 300; j += 58) {   //48 58
                 cubos.add(new Meth(i, j));
             }
+
         }
+
+        for (int i = 80; i < 900; i += 104) {  //42
+            for (int j = 100; j < 300; j += 58) {   //48
+                cubos2.add(new Meth(i, j));
+            }
+
+        }
+        
+
     }
 
     public void start() {
@@ -174,7 +192,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
 
         }
         heroe.setPosX(heroe.getPosX() + direccion);
-        if (!lanzada){
+        if (!lanzada) {
             bola.setPosX(bola.getPosX() + direccion);
         }
         if (heroe.intersecta(bola)) {
@@ -189,14 +207,13 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
             if (centro < heroe.getPosX() + (heroe.getWidth() / 4)) {
                 if (centro < heroe.getPosX() + (heroe.getWidth() / 8)) {
                     if (vx > 0) {
-                        vx = -1*(vx * 2);
+                        vx = -1 * (vx * 2);
                         if (inclinado) {
                             vx = vx / 2;
                         }
                         inclinado = true;
                     }
-                }
-                else{
+                } else {
                     if (vx > 0) {
                         vx = -vx;
                     }
@@ -209,14 +226,13 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
             if (centro > heroe.getPosX() + ((heroe.getWidth() / 4) * 3)) {
                 if (centro > heroe.getPosX() + ((heroe.getWidth() / 8) * 7)) {
                     if (vx < 0) {
-                        vx = -1*(vx * 2);
+                        vx = -1 * (vx * 2);
                         if (inclinado) {
                             vx = vx / 2;
                         }
                         inclinado = true;
                     }
-                }
-                else{
+                } else {
                     if (vx < 0) {
                         vx = -vx;
                     }
@@ -233,8 +249,8 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
             vidas--;
             lanzada = false;
             bolamueve = false;
-            bola.setPosX(heroe.getPosX()+heroe.getWidth()/2-(bola.getWidth()/2));
-            bola.setPosY(heroe.getPosY()-bola.getHeight());   
+            bola.setPosX(heroe.getPosX() + heroe.getWidth() / 2 - (bola.getWidth() / 2));
+            bola.setPosY(heroe.getPosY() - bola.getHeight());
         }
         if (bola.getWidth() + bola.getPosX() >= this.getWidth() || bola.getPosX() < 0) {
             vx = -vx;
@@ -268,13 +284,47 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
                     vx = -vx;
                 }
                 cubos.remove(i);
-                if (sound){
-                        chCacha.play();
+
+                if (sound) {
+                    chCacha.play();
                 }
-                bola.setScore(bola.getScore()+10);
+                bola.setScore(bola.getScore() + 10);
+
             }
         }
 
+        if (cubos.isEmpty()) {
+            nivel2 = true;
+        }
+
+        if (nivel2) {
+            for (int i = 0; i < cubos2.size(); i++) {
+                Meth actual = (Meth) cubos2.get(i);
+                if (actual.intersecta(bola)) {
+                    int centrox = bola.getPosX() + (bola.getWidth() / 2);
+                    int centroy = bola.getPosY() + (bola.getHeight() / 2);
+                    if (centroy < actual.getPosY() && vy > 0) {
+                        vy = -vy;
+                    }
+                    if (centroy > actual.getPosY() + actual.getHeight() && vy < 0) {
+                        vy = -vy;
+                    }
+                    if (centrox < actual.getPosX() && vx > 0) {
+                        vx = -vx;
+                    }
+                    if (centrox > actual.getPosX() + actual.getWidth() && vx < 0) {
+                        vx = -vx;
+                    }
+                    cubos2.remove(i);
+                    if (sound) {
+                        chCacha.play();
+                    }
+                    bola.setScore(bola.getScore() + 10);
+
+                }
+            }
+        }
+        
     }
 
     /**
@@ -404,12 +454,12 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
                 empezar = true;
             }
         }
-        
-        if (e.getKeyCode() == KeyEvent.VK_SPACE){
-            if (!lanzada){
+
+        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+            if (!lanzada) {
                 bolamueve = true;
                 vx = 3 + (int) Math.random() * 7;
-                if ((int) (Math.random() * 2) == 1){
+                if ((int) (Math.random() * 2) == 1) {
                     vx = -vx;
                 }
                 vy = -1 * (6 + (int) Math.random() * 12);
@@ -446,9 +496,18 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
                     g.setColor(Color.WHITE);
                     g.drawString("Puntaje: " + bola.getScore(), 20, 50);
                     g.drawString("Vidas    : " + vidas, 20, 65);
-                    for (int i = 0; i < cubos.size(); i++) {
-                        g.drawImage(((Meth) cubos.get(i)).getImagen(), ((Meth) cubos.get(i)).getPosX(), ((Meth) cubos.get(i)).getPosY(), this);
+                    if (!nivel2) {
+                        for (int i = 0; i < cubos.size(); i++) {
+                            g.drawImage(((Meth) cubos.get(i)).getImagen(), ((Meth) cubos.get(i)).getPosX(), ((Meth) cubos.get(i)).getPosY(), this);
+                        }
                     }
+
+                    if (nivel2) {
+                        for (int i = 0; i < cubos2.size(); i++) {
+                            g.drawImage(((Meth) cubos2.get(i)).getImagen(), ((Meth) cubos2.get(i)).getPosX(), ((Meth) cubos2.get(i)).getPosY(), this);
+                        }
+                    }
+
                     if (tituloMov < this.getWidth()) {
                         g.drawImage(titulo, tituloMov, 0, this);
                         g.drawImage(start, tituloMov + 600, 100, this);
