@@ -412,7 +412,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
                 if ((int) (Math.random() * 2) == 1){
                     vx = -vx;
                 }
-                vy = -1 * (3 + (int) Math.random() * 7);
+                vy = -1 * (6 + (int) Math.random() * 12);
                 lanzada = true;
             }
         }
