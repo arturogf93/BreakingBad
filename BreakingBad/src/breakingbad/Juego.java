@@ -330,11 +330,11 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         // Presiono izq
         if (e.getKeyCode() == KeyEvent.VK_LEFT) {
             movimiento = true;
-            direccion = -(vidas * 2);
+            direccion = -5;
         } //Presiono der
         else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
             movimiento = true;
-            direccion = vidas * 2;
+            direccion = 5;
         }
     }
 
