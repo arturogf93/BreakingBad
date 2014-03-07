@@ -20,6 +20,7 @@ import java.awt.event.MouseMotionListener;
 import java.io.*;
 import java.net.URL;
 import java.util.LinkedList;
+import java.awt.Font;
 
 public class Juego extends JFrame implements Runnable, KeyListener, MouseListener, MouseMotionListener {
 
@@ -644,7 +645,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
 
         }
 
-        //g.setFont(new Font("TimesRoman", Font.PLAIN, 20));         
+        g.setFont(new Font("TimesRoman", Font.BOLD, 30));         
     }
 
     public void mouseClicked(MouseEvent e) {
