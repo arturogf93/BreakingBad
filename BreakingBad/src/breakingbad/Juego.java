@@ -45,14 +45,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
     private SoundClip chFalla;          //audio para las paredes
     private int vidas;                  //entero para las vidas
     private int contcaidas;             //entero para saber cuantas bombas han caido
-    private FileWriter file;            //un FileWriter para el manejo de archivos
-    private PrintWriter out;            //un Printwriter para el manejo de archivos
-    private boolean guarda;             //flag para saber si se guarda
-    private boolean carga;              //flag para saber si se carga
-    private File archivo;               //File para el archivo a crear
-    private FileReader fr;              //fileReader para la lectura del archivo
-    private BufferedReader br;          //Para leer las variables del archivo
-    private int arr[];                  //arreglo para guardar las variables
+                 
     private int vx;                     //velocidad en x
     private int vy;                     //velocidad en y
     private boolean gameover;           //flag para el gameover
@@ -76,40 +69,51 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
     public void init() throws IOException {
         this.setSize(1024, 683);
         cubos = new LinkedList();
-        info = false;
-        sound = true;
-        gameover = false;
-        vidas = 5;
         addKeyListener(this);
-        direccion = 0;                  //Se inicializa a 0 la direccion (no se mueve)
+        addMouseListener(this);
+        addMouseMotionListener(this);
         //setBackground(Color.BLACK);     //fondo negra
-        movimiento = false;             // al principi esta quirto
-        heroe = new Bueno(0, 0);
+        
+        //heroe y bola
         bola = new Pelota(30, 330, 0, 0);
+        heroe = new Bueno(0, 0);
         bola.setPosX((this.getWidth() / 2) - (new ImageIcon(bola.getImagen())).getIconWidth() / 2);
         bola.setPosY(this.getHeight() - (new ImageIcon(heroe.getImagen())).getIconHeight() - 40);
         heroe.setPosX((this.getWidth() / 2) - (new ImageIcon(heroe.getImagen())).getIconWidth() / 2);   //posicion x del Bueno
         heroe.setPosY(this.getHeight() - (new ImageIcon(heroe.getImagen())).getIconHeight() - 2);    //posicion y del Bueno
-        addMouseListener(this);
-        addMouseMotionListener(this);
-        //URL eaURL = this.getClass().getResource("chocaHeroe.wav");
-        chCacha = new SoundClip("Sounds/chocaHeroe.wav");
-        //URL choURL = this.getClass().getResource("chocaPared.wav");
-        chFalla = new SoundClip("Sounds/chocaPared.wav");
-        guarda = false;
-        carga = false;
-        arr = new int[12];
-        URL gURL = this.getClass().getResource("Images/Creditos.png");
-        im_over = Toolkit.getDefaultToolkit().getImage(gURL);
-        URL iURL = this.getClass().getResource("Images/Info.png");
-        informacion = Toolkit.getDefaultToolkit().getImage(iURL);
+        //
+        
 
+        //Sonidos
+        chCacha = new SoundClip("Sounds/chocaHeroe.wav");
+        chFalla = new SoundClip("Sounds/chocaPared.wav");
+        //
+
+        
+        //Imagenes
         titulo = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/titulo.png"));
         start = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/start3.gif"));
         fondo = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/RV.jpg"));
         meth = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/meth.jpg"));
-        empezar = false;
+        URL gURL = this.getClass().getResource("Images/Creditos.png");
+        im_over = Toolkit.getDefaultToolkit().getImage(gURL);
+        URL iURL = this.getClass().getResource("Images/Info.png");
+        informacion = Toolkit.getDefaultToolkit().getImage(iURL);
+       //
+        
+        //ints
+        vidas = 5;
+        direccion = 0;                  //Se inicializa a 0 la direccion (no se mueve)
         tituloMov = 0;
+        //
+         
+        //booleans
+        info = false;
+        sound = true;
+        gameover = false;
+        movimiento = false;             // al principi esta quirto
+        empezar = false;
+        //
         
         for (int i = 80; i < 900; i += 42) {
             for (int j = 100; j < 300; j += 48) {
@@ -196,6 +200,9 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         for(int i=0;i<cubos.size();i++)
             if(cubos.get(i).intersecta(bola)) {
                 cubos.remove(i);
+                bola.setPosY(bola.getPosY()+10);
+                bola.setPosX(bola.getPosX()+10);
+                bolamueve=false;
             }
 
     }

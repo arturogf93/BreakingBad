@@ -21,11 +21,11 @@ public class Bueno extends Base {
     //@param  posY es para saber la posicion y de tipo <code>int</code>
     public Bueno(int posX, int posY) {
         super(posX, posY);
-        Image link1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/hank.png"));
-        Image link2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/hank.png"));
-        Image link3 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/hank.png"));
-        Image link4 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/hank.png"));
-        Image link5 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/hank.png"));
+        Image link1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/hankgomez.png"));
+        Image link2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/hankgomez.png"));
+        Image link3 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/hankgomez.png"));
+        Image link4 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/hankgomez.png"));
+        Image link5 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/hankgomez.png"));
         (this.getImagenes()).sumaCuadro(link1, 70);
         (this.getImagenes()).sumaCuadro(link2, 70);
         (this.getImagenes()).sumaCuadro(link3, 70);
