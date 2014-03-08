@@ -41,6 +41,8 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
     private SoundClip tituloSonido;
     private SoundClip nivelSonido;
     private SoundClip bossSonido;
+    private SoundClip hit;
+    private SoundClip powerUp;
 
     private Image im_over;              //imagen del gameover
     private Image informacion;          //imagen de la informacion
@@ -132,7 +134,8 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         tituloSonido = new SoundClip("Sounds/tituloSonido.wav");
         nivelSonido = new SoundClip("Sounds/nivelSonido.wav");
         bossSonido = new SoundClip("Sounds/bossSonido.wav");
-
+        powerUp = new SoundClip("Sounds/PowerUp.wav");
+        hit = new SoundClip("Sounds/hit.wav");
         //
         //Imagenes
         titulo = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/titulo.png"));
@@ -142,7 +145,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         fondo3 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/fondo3.jpg"));
         fin = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/gameover.jpg"));
         comp = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/completo.jpg"));
-        URL gURL = this.getClass().getResource("Images/gameover.jpg");
+        URL gURL = this.getClass().getResource("Images/gameover.gif");
         im_over = Toolkit.getDefaultToolkit().getImage(gURL);
         URL iURL = this.getClass().getResource("Images/info.jpg");
         informacion = Toolkit.getDefaultToolkit().getImage(iURL);
@@ -267,6 +270,9 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
             (poder.getImagenes()).actualiza(tiempoActual);
             poder.setPosY(poder.getPosY() + poder.getVelocidad());
             if (poder.intersecta(heroe)) {
+                if (sound){
+                    powerUp.play();
+                }
                 letr = true;
                 poderactivo = true;
                 timer = 0;
@@ -463,6 +469,9 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
             poder.setVelocidad(0);
         }
         if (heroe.intersecta(bola)) {
+            if (sound){
+                hit.play();
+            }
             vy = -vy;
             int centro = bola.getPosX() + (bola.getWidth() / 2);
             if ((centro >= heroe.getPosX() + (heroe.getWidth() / 4)) && (centro <= heroe.getPosX() + ((heroe.getWidth() / 4) * 3))) {
