@@ -347,20 +347,29 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
             walter.setPosX(walter.getPosX() + walter.getVelocidadX());
             walter.setPosY(walter.getPosY() + walter.getVelocidadY());
         }
-        if (tSonido) {
+        if (tSonido&&sound) {
             tituloSonido.play2();
+        }
+        else{
+            tituloSonido.stop();
         }
         if (!tSonido) {
             tituloSonido.stop();
         }
-        if (nSonido) {
+        if (nSonido&&sound) {
             nivelSonido.play2();
+        }
+        else{
+            nivelSonido.stop();
         }
         if (nivel3) {
             nivelSonido.stop();
         }
-        if (nivel3) {
+        if (nivel3&&sound) {
             bossSonido.play2();
+        }
+        else{
+            bossSonido.stop();
         }
 
         
