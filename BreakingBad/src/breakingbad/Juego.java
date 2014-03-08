@@ -44,7 +44,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
     private Image start;
     private Image fondo;
     private Image fondo2;
-    private Image fondo3
+    private Image fondo3;
     private Image fin;
 
     private LinkedList<Meth> cubos;
