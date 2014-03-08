@@ -36,7 +36,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
     private Image dbImage;              //Imagen para el doblebuffer  
     private Poderes poder;
     private long tiempoActual;          //Long para el tiempo del applet
-    private SoundClip chCacha;          //audio para el heroe
+    private SoundClip chChoco;          //audio para el heroe
     private SoundClip chFalla;          //audio para las paredes
     private Image im_over;              //imagen del gameover
     private Image informacion;          //imagen de la informacion
@@ -119,7 +119,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         bola.setPosY(heroe.getPosY() - bola.getHeight());
 
         //Sonidos
-        chCacha = new SoundClip("Sounds/chocaHeroe.wav");
+        chChoco = new SoundClip("Sounds/chocaHeroe.wav");
         chFalla = new SoundClip("Sounds/chocaPared.wav");
         //
 
@@ -373,7 +373,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
                     }
                     cubos2.remove(i);
                     if (sound) {
-                        chCacha.play();
+                        chChoco.play();
                     }
                     bola.setScore(bola.getScore() + 10);
 
@@ -407,7 +407,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
                         poder.setVelocidad(2);
                     }
                     if (sound) {
-                        chCacha.play();
+                        chChoco.play();
                     }
                     bola.setScore(bola.getScore() + 10 * tipo2);
                     cubos.remove(i);
@@ -471,6 +471,9 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
 
         if (nivel3) {
             if (bola.intersecta(walter)) {
+                if (sound){
+                    chChoco.play();
+                }
                 lanzada = false;
                 bola.setPosX(heroe.getPosX() + heroe.getWidth() / 2 - (bola.getWidth() / 2));
                 bola.setPosY(heroe.getPosY() - bola.getHeight());
