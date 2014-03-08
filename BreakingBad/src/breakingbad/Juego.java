@@ -38,6 +38,10 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
     private long tiempoActual;          //Long para el tiempo del applet
     private SoundClip chChoco;          //audio para el heroe
     private SoundClip chFalla;          //audio para las paredes
+    private SoundClip tituloSonido;
+    private SoundClip nivelSonido;
+    private SoundClip bossSonido;
+
     private Image im_over;              //imagen del gameover
     private Image informacion;          //imagen de la informacion
     private Image titulo;
@@ -46,6 +50,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
     private Image fondo2;
     private Image fondo3;
     private Image fin;
+    private Image comp;
 
     private LinkedList<Meth> cubos;
     private LinkedList<Meth> cubos2;
@@ -82,6 +87,9 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
     private boolean poderactivo;
     private int pegadaswalter;
     private boolean pantalla;
+    private boolean tSonido;
+    private boolean nSonido;
+    private boolean bSonido;
 
     /**
      * Metodo <I>init</I> sobrescrito de la clase <code>Applet</code>.<P>
@@ -121,16 +129,20 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         //Sonidos
         chChoco = new SoundClip("Sounds/chocaHeroe.wav");
         chFalla = new SoundClip("Sounds/chocaPared.wav");
-        //
+        tituloSonido = new SoundClip("Sounds/tituloSonido.wav");
+        nivelSonido = new SoundClip("Sounds/nivelSonido.wav");
+        bossSonido = new SoundClip("Sounds/bossSonido.wav");
 
+        //
         //Imagenes
         titulo = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/titulo.png"));
         start = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/start3.gif"));
         fondo = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/RV.jpg"));
         fondo2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/fondo2.jpg"));
         fondo3 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/fondo3.jpg"));
-        fin = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/gameover.gif"));
-        URL gURL = this.getClass().getResource("Images/Creditos.png");
+        fin = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/gameover.jpg"));
+        comp = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/completo.jpg"));
+        URL gURL = this.getClass().getResource("Images/gameover.jpg");
         im_over = Toolkit.getDefaultToolkit().getImage(gURL);
         URL iURL = this.getClass().getResource("Images/info.jpg");
         informacion = Toolkit.getDefaultToolkit().getImage(iURL);
@@ -154,6 +166,9 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         nivel3 = false;
         lanzada = false;
         inclinado = false;
+        tSonido = true;
+        nSonido = false;
+        bSonido = false;
         //
 
         for (int i = 80; i < this.getWidth() - 80; i += 92) {  //42 52
@@ -290,7 +305,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
             }
         }
 
-        if (cubos2.isEmpty() && !nivel3&&!ganaste) {
+        if (cubos2.isEmpty() && !nivel3 && !ganaste) {
             nivel3 = true;
             walter.setPosX(150);
             walter.setPosY(150);
@@ -317,21 +332,39 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         }
 
         if (nivel3) {
-            if (walter.getPosX()+walter.getWidth()>this.getWidth()){
+            if (walter.getPosX() + walter.getWidth() > this.getWidth()) {
                 walter.setVelocidadX(-10);
             }
-            if (walter.getPosX()<0){
+            if (walter.getPosX() < 0) {
                 walter.setVelocidadX(10);
             }
-            if(walter.getPosY()+walter.getHeight()>450){
+            if (walter.getPosY() + walter.getHeight() > 450) {
                 walter.setVelocidadY(-3);
             }
-            if(walter.getPosY()<150){
+            if (walter.getPosY() < 150) {
                 walter.setVelocidadY(3);
             }
-            walter.setPosX(walter.getPosX()+walter.getVelocidadX());
-            walter.setPosY(walter.getPosY()+walter.getVelocidadY());
+            walter.setPosX(walter.getPosX() + walter.getVelocidadX());
+            walter.setPosY(walter.getPosY() + walter.getVelocidadY());
         }
+        if (tSonido) {
+            tituloSonido.play2();
+        }
+        if (!tSonido) {
+            tituloSonido.stop();
+        }
+        if (nSonido) {
+            nivelSonido.play2();
+        }
+        if (nivel3) {
+            nivelSonido.stop();
+        }
+        if (nivel3) {
+            bossSonido.play2();
+        }
+
+        
+
     }
 
     /**
@@ -365,7 +398,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
                         vx = -vx;
                     }
                     randompoder = ((int) (Math.random() * 7));
-                    if (randompoder == 4 && !caer &&!poderactivo) {
+                    if (randompoder == 4 && !caer && !poderactivo) {
                         caer = true;
                         poder.setPosX(actual.getPosX() + 5);
                         poder.setPosY(actual.getPosY() + 5);
@@ -471,7 +504,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
 
         if (nivel3) {
             if (bola.intersecta(walter)) {
-                if (sound){
+                if (sound) {
                     chChoco.play();
                 }
                 lanzada = false;
@@ -601,6 +634,8 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         if (e.getKeyCode() == KeyEvent.VK_E) {  //dejo de presionar la tecla de arriba
             if (!empezar) {
                 empezar = true;
+                tSonido = false;
+                nSonido = true;
             }
         }
 
@@ -626,13 +661,13 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
      * @param g es el <code>objeto grafico</code> usado para dibujar.
      */
     public void paint1(Graphics g) {
-        if (nivel1) {
+        if (nivel1 && !ganaste) {
             g.drawImage(fondo, 0, 0, this);
         }
-        if (nivel2) {
+        if (nivel2 && !ganaste) {
             g.drawImage(fondo2, 0, 0, this);
         }
-        if (nivel3) {
+        if (nivel3 && !ganaste) {
             g.drawImage(fondo3, 0, 0, this);
         }
         if (heroe != null && bola != null && titulo != null) {
@@ -693,6 +728,12 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
 
         if (nivel3) {
             g.drawImage(walter.getImagen(), walter.getPosX(), walter.getPosY(), this);
+        }
+        if(gameover) {
+            g.drawImage(fin, tituloMov, 0, this);
+        }
+        if(ganaste) {
+            g.drawImage(comp, tituloMov, 0, this);
         }
 
         g.setFont(new Font("TimesRoman", Font.BOLD, 30));

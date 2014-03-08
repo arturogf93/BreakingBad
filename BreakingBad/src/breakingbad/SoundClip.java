@@ -128,6 +128,16 @@ public class SoundClip {
             clip.loop(repeat);
         }
     }
+    
+        public void play2() {
+        if (!isLoaded()) {
+            return;
+        }
+        //clip.setFramePosition(0);
+         else {
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
+        }
+    }
 
     public void stop() {
         clip.stop();
