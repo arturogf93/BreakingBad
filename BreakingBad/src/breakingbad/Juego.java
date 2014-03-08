@@ -88,7 +88,6 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
     private boolean letr;
     private boolean poderactivo;
     private int pegadaswalter;
-    private boolean pantalla;
     private boolean tSonido;
     private boolean nSonido;
     private boolean bSonido;
@@ -99,7 +98,6 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
      * usarse en el <code>Applet</code> y se definen funcionalidades.
      */
     public void init() {
-        pantalla = false;
         pegadaswalter = 3;
         ganaste = false;
         decision = -1;
@@ -658,7 +656,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         }
 
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            if (!lanzada) {
+            if (!lanzada&&empezar) {
                 bolamueve = true;
                 vx = 4 + (int) (Math.random() * 2);
                 if ((int) (Math.random() * 2) == 1) {
@@ -698,7 +696,10 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
                     //Dibuja la imagen en la posicion actualizada
                     g.drawImage(heroe.getImagen(), heroe.getPosX(), heroe.getPosY(), this);
                     g.drawImage(bola.getImagen(), bola.getPosX(), bola.getPosY(), this);
-
+                    if (!lanzada){
+                         g.setColor(Color.WHITE);
+                         g.drawString("Presiona espacio para lanzar", (this.getWidth() / 2) - 160, (this.getHeight() / 2)+60);
+                    }
                     if (pausa) {
                         g.setColor(Color.WHITE);
                         g.drawString("" + heroe.getPAUSADO(), heroe.getPosX() - heroe.getWidth() / 7, heroe.getPosY() + (heroe.getHeight() / 2));
@@ -716,7 +717,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
                     }
                     if (letr) {
                         g.setColor(Color.BLACK);
-                        g.drawString(letrero, (this.getWidth() / 2) - 70, this.getHeight() / 2);
+                        g.drawString(letrero, (this.getWidth() / 2) - 100, this.getHeight() / 2);
                         g.setColor(Color.WHITE);
                     }
                     if (nivel2) {
