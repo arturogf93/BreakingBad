@@ -133,7 +133,6 @@ public class SoundClip {
         if (!isLoaded()) {
             return;
         }
-        //clip.setFramePosition(0);
          else {
             clip.loop(Clip.LOOP_CONTINUOUSLY);
         }

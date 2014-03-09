@@ -53,6 +53,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
     private Image fondo3;
     private Image fin;
     private Image comp;
+    private Image finW;
 
     private LinkedList<Meth> cubos;
     private LinkedList<Meth> cubos2;
@@ -143,10 +144,12 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         fondo3 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/fondo3.jpg"));
         fin = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/gameover.jpg"));
         comp = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/completo.jpg"));
-        URL gURL = this.getClass().getResource("Images/gameover.gif");
+        URL gURL = this.getClass().getResource("Images/finwalter.gif");
         im_over = Toolkit.getDefaultToolkit().getImage(gURL);
         URL iURL = this.getClass().getResource("Images/info.jpg");
         informacion = Toolkit.getDefaultToolkit().getImage(iURL);
+        URL fURL = this.getClass().getResource("Images/fin.gif");
+        finW = Toolkit.getDefaultToolkit().getImage(fURL);
        //
 
         //ints
@@ -676,6 +679,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
      *
      * @param g es el <code>objeto grafico</code> usado para dibujar.
      */
+   
     public void paint1(Graphics g) {
         if (nivel1 && !ganaste) {
             g.drawImage(fondo, 0, 0, this);
@@ -688,7 +692,21 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         }
         if (heroe != null && bola != null && titulo != null) {
             if (gameover) {
-                g.drawImage(im_over, 0, 30, this);
+                g.drawImage(fin, 0, 0, this);
+                g.drawImage(im_over, 280, 210, this);
+                g.setColor(Color.WHITE);
+                g.drawString("Presiona 'n' para", 20, 350);
+                g.drawString("empezar otra vez", 20, 370);
+                g.drawString("Puntaje: "+bola.getScore(), 20, 470);
+            }
+        if(ganaste) {
+            g.drawImage(comp, 0, -15, this);
+            g.drawImage(finW, 280, 210, this);
+            g.setColor(Color.WHITE);
+            g.drawString("Presiona 'n' para", 20, 350);
+            g.drawString("empezar otra vez", 20, 370);
+            g.drawString("Puntaje: "+bola.getScore(), 20, 470);
+
             } else {
                 if (info) {
                     g.drawImage(informacion, 0, 0, this);
@@ -748,12 +766,8 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         if (nivel3) {
             g.drawImage(walter.getImagen(), walter.getPosX(), walter.getPosY(), this);
         }
-        if(gameover) {
-            g.drawImage(fin, tituloMov, 0, this);
-        }
-        if(ganaste) {
-            g.drawImage(comp, tituloMov, 0, this);
-        }
+
+
 
         g.setFont(new Font("TimesRoman", Font.BOLD, 30));
     }
