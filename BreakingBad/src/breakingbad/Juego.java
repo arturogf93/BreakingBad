@@ -186,7 +186,6 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
             for (int j = 100; j < 300; j += 68) {   //48
                 cubos2.add(new Meth(i, j));
             }
-
         }
 
     }
@@ -424,7 +423,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
                     if (sound) {
                         chChoco.play();
                     }
-                    bola.setScore(bola.getScore() + 10);
+                    bola.setScore(bola.getScore() + 10* tipo2);
 
                 }
             }
@@ -539,6 +538,18 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
                 }
             }
         }
+        
+        if (ganaste||gameover){
+            nivel1=false;
+            nivel2=false;
+            nivel3=false;
+            for(int i = 0; i < cubos.size();i++){
+                cubos.remove(i);
+            }
+            for(int i = 0; i < cubos2.size();i++){
+                cubos2.remove(i);
+            }
+        }
 
         //bomba.colision(this.getHeight(), this.getHeight());
     }
@@ -642,13 +653,30 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
             direccion = 0;
         }
-        /*if (e.getKeyCode() == KeyEvent.VK_N) {
-         if (vidas <= 0) {
-         vidas = 5;
-         bola.setScore(0);
-         gameover = false;
+        if (e.getKeyCode() == KeyEvent.VK_N) {
+            if (gameover||ganaste) {
+                vidas = 3;
+                bola.setScore(0);
+                gameover = false;
+                ganaste=false;
+                nivel1=true;
+                for (int i = 80; i < this.getWidth() - 80; i += 92) {  //42 52
+                    for (int j = 100; j < 300; j += 68) {   //48 58
+                        cubos.add(new Meth(i, j));
+                    }
+                }
+
+                for (int i = 80; i < this.getWidth() - 80; i += 52) {  //42
+                    for (int j = 100; j < 300; j += 68) {   //48
+                        cubos2.add(new Meth(i, j));
+                    }
+                }
+                walter.setPosX(150);
+                walter.setPosY(150);
+                walter.setVelocidadX(0);
+                walter.setVelocidadY(0);
+            }  
          }
-         }*/
 
         if (e.getKeyCode() == KeyEvent.VK_E) {  //dejo de presionar la tecla de arriba
             if (!empezar) {
@@ -706,15 +734,17 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
             g.drawString("Presiona 'n' para", 20, 350);
             g.drawString("empezar otra vez", 20, 370);
             g.drawString("Puntaje: "+bola.getScore(), 20, 470);
-
+            
             } else {
                 if (info) {
                     g.drawImage(informacion, 0, 0, this);
                 } else {
                     //Dibuja la imagen en la posicion actualizada
-                    g.drawImage(heroe.getImagen(), heroe.getPosX(), heroe.getPosY(), this);
-                    g.drawImage(bola.getImagen(), bola.getPosX(), bola.getPosY(), this);
-                    if (!lanzada){
+                    if (!(ganaste||gameover)){
+                        g.drawImage(heroe.getImagen(), heroe.getPosX(), heroe.getPosY(), this);
+                        g.drawImage(bola.getImagen(), bola.getPosX(), bola.getPosY(), this);
+                    }
+                    if (!lanzada&&(!(ganaste||gameover))){
                          g.setColor(Color.WHITE);
                          g.drawString("Presiona espacio para lanzar", (this.getWidth() / 2) - 160, (this.getHeight() / 2)+60);
                     }
@@ -733,7 +763,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
                     if (caer) {
                         g.drawImage(poder.getImagen(), poder.getPosX(), poder.getPosY(), this);
                     }
-                    if (letr) {
+                    if (letr&&(!(ganaste||gameover))) {
                         g.setColor(Color.BLACK);
                         g.drawString(letrero, (this.getWidth() / 2) - 100, this.getHeight() / 2);
                         g.setColor(Color.WHITE);
