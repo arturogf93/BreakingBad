@@ -270,7 +270,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
             (poder.getImagenes()).actualiza(tiempoActual);
             poder.setPosY(poder.getPosY() + poder.getVelocidad());
             if (poder.intersecta(heroe)) {
-                if (sound){
+                if (sound) {
                     powerUp.play();
                 }
                 letr = true;
@@ -353,32 +353,27 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
             walter.setPosX(walter.getPosX() + walter.getVelocidadX());
             walter.setPosY(walter.getPosY() + walter.getVelocidadY());
         }
-        if (tSonido&&sound) {
+        if (tSonido && sound) {
             tituloSonido.play2();
-        }
-        else{
+        } else {
             tituloSonido.stop();
         }
         if (!tSonido) {
             tituloSonido.stop();
         }
-        if (nSonido&&sound) {
+        if (nSonido && sound) {
             nivelSonido.play2();
-        }
-        else{
+        } else {
             nivelSonido.stop();
         }
         if (nivel3) {
             nivelSonido.stop();
         }
-        if (nivel3&&sound) {
+        if (nivel3 && sound) {
             bossSonido.play2();
-        }
-        else{
+        } else {
             bossSonido.stop();
         }
-
-        
 
     }
 
@@ -423,7 +418,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
                     if (sound) {
                         chChoco.play();
                     }
-                    bola.setScore(bola.getScore() + 10* tipo2);
+                    bola.setScore(bola.getScore() + 10 * tipo2);
 
                 }
             }
@@ -469,7 +464,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
             poder.setVelocidad(0);
         }
         if (heroe.intersecta(bola)) {
-            if (sound){
+            if (sound) {
                 hit.play();
             }
             vy = -vy;
@@ -538,15 +533,15 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
                 }
             }
         }
-        
-        if (ganaste||gameover){
-            nivel1=false;
-            nivel2=false;
-            nivel3=false;
-            for(int i = 0; i < cubos.size();i++){
+
+        if (ganaste || gameover) {
+            nivel1 = false;
+            nivel2 = false;
+            nivel3 = false;
+            for (int i = 0; i < cubos.size(); i++) {
                 cubos.remove(i);
             }
-            for(int i = 0; i < cubos2.size();i++){
+            for (int i = 0; i < cubos2.size(); i++) {
                 cubos2.remove(i);
             }
         }
@@ -654,12 +649,12 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
             direccion = 0;
         }
         if (e.getKeyCode() == KeyEvent.VK_N) {
-            if (gameover||ganaste) {
+            if (gameover || ganaste) {
                 vidas = 3;
                 bola.setScore(0);
                 gameover = false;
-                ganaste=false;
-                nivel1=true;
+                ganaste = false;
+                nivel1 = true;
                 for (int i = 80; i < this.getWidth() - 80; i += 92) {  //42 52
                     for (int j = 100; j < 300; j += 68) {   //48 58
                         cubos.add(new Meth(i, j));
@@ -675,8 +670,8 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
                 walter.setPosY(150);
                 walter.setVelocidadX(0);
                 walter.setVelocidadY(0);
-            }  
-         }
+            }
+        }
 
         if (e.getKeyCode() == KeyEvent.VK_E) {  //dejo de presionar la tecla de arriba
             if (!empezar) {
@@ -687,7 +682,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         }
 
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            if (!lanzada&&empezar) {
+            if (!lanzada && empezar) {
                 bolamueve = true;
                 vx = 4 + (int) (Math.random() * 2);
                 if ((int) (Math.random() * 2) == 1) {
@@ -707,7 +702,6 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
      *
      * @param g es el <code>objeto grafico</code> usado para dibujar.
      */
-   
     public void paint1(Graphics g) {
         if (nivel1 && !ganaste) {
             g.drawImage(fondo, 0, 0, this);
@@ -725,28 +719,28 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
                 g.setColor(Color.WHITE);
                 g.drawString("Presiona 'n' para", 20, 350);
                 g.drawString("empezar otra vez", 20, 370);
-                g.drawString("Puntaje: "+bola.getScore(), 20, 470);
+                g.drawString("Puntaje: " + bola.getScore(), 20, 470);
             }
-        if(ganaste) {
-            g.drawImage(comp, 0, -15, this);
-            g.drawImage(finW, 280, 210, this);
-            g.setColor(Color.WHITE);
-            g.drawString("Presiona 'n' para", 20, 350);
-            g.drawString("empezar otra vez", 20, 370);
-            g.drawString("Puntaje: "+bola.getScore(), 20, 470);
-            
+            if (ganaste) {
+                g.drawImage(comp, 0, -15, this);
+                g.drawImage(finW, 280, 210, this);
+                g.setColor(Color.WHITE);
+                g.drawString("Presiona 'n' para", 20, 350);
+                g.drawString("empezar otra vez", 20, 370);
+                g.drawString("Puntaje: " + bola.getScore(), 20, 470);
+
             } else {
                 if (info) {
                     g.drawImage(informacion, 0, 0, this);
                 } else {
                     //Dibuja la imagen en la posicion actualizada
-                    if (!(ganaste||gameover)){
+                    if (!(ganaste || gameover)) {
                         g.drawImage(heroe.getImagen(), heroe.getPosX(), heroe.getPosY(), this);
                         g.drawImage(bola.getImagen(), bola.getPosX(), bola.getPosY(), this);
                     }
-                    if (!lanzada&&(!(ganaste||gameover))){
-                         g.setColor(Color.WHITE);
-                         g.drawString("Presiona espacio para lanzar", (this.getWidth() / 2) - 160, (this.getHeight() / 2)+60);
+                    if (!lanzada && (!(ganaste || gameover))) {
+                        g.setColor(Color.WHITE);
+                        g.drawString("Presiona espacio para lanzar", (this.getWidth() / 2) - 160, (this.getHeight() / 2) + 60);
                     }
                     if (pausa) {
                         g.setColor(Color.WHITE);
@@ -763,7 +757,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
                     if (caer) {
                         g.drawImage(poder.getImagen(), poder.getPosX(), poder.getPosY(), this);
                     }
-                    if (letr&&(!(ganaste||gameover))) {
+                    if (letr && (!(ganaste || gameover))) {
                         g.setColor(Color.BLACK);
                         g.drawString(letrero, (this.getWidth() / 2) - 100, this.getHeight() / 2);
                         g.setColor(Color.WHITE);
@@ -796,8 +790,6 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         if (nivel3) {
             g.drawImage(walter.getImagen(), walter.getPosX(), walter.getPosY(), this);
         }
-
-
 
         g.setFont(new Font("TimesRoman", Font.BOLD, 30));
     }

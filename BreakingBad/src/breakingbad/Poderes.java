@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package breakingbad;
 
 import java.awt.Image;
@@ -14,10 +13,10 @@ import java.awt.Toolkit;
  * @author Abraham
  */
 public class Poderes extends Base {
-        
-        private int velocidad;
-    
-        public Poderes(int posX, int posY, int vel) {
+
+    private int velocidad;
+
+    public Poderes(int posX, int posY, int vel) {
         super(posX, posY);
         velocidad = vel;
         Image bomb1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("Images/Poder1.png"));
@@ -36,14 +35,14 @@ public class Poderes extends Base {
         (this.getImagenes()).sumaCuadro(bomb6, 70);
         (this.getImagenes()).sumaCuadro(bomb7, 70);
         (this.getImagenes()).sumaCuadro(bomb8, 70);
-        }
-        
-        public void setVelocidad(int velocidad) {  //Metodo para asignar la velocidad
-        this.velocidad = velocidad;
-        }
+    }
 
-        //@return    regresa la velocidad de tipo <code>TipoM</code>
-        public int getVelocidad() {                 //Metodo para obtener la velocidad
-            return velocidad;
-        }    
+    public void setVelocidad(int velocidad) {  //Metodo para asignar la velocidad
+        this.velocidad = velocidad;
+    }
+
+    //@return    regresa la velocidad de tipo <code>TipoM</code>
+    public int getVelocidad() {                 //Metodo para obtener la velocidad
+        return velocidad;
+    }
 }
