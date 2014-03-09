@@ -557,6 +557,10 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
             for (int i = 0; i < cubos2.size(); i++) {
                 cubos2.remove(i);
             }
+            walter.setVelocidadX(0);
+            walter.setVelocidadY(0);
+            walter.setPosX(-100);
+            walter.setPosY(-100);
         }
 
         //bomba.colision(this.getHeight(), this.getHeight());
@@ -667,7 +671,11 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
                 bola.setScore(0);
                 gameover = false;
                 ganaste = false;
-                nivel1 = true;
+                nivel1 = true;                
+                walter.setPosX(-150);
+                walter.setPosY(-150);
+                walter.setVelocidadX(0);
+                walter.setVelocidadY(0);
                 for (int i = 80; i < this.getWidth() - 80; i += 92) {  //42 52
                     for (int j = 100; j < 300; j += 68) {   //48 58
                         cubos.add(new Meth(i, j));
@@ -679,10 +687,6 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
                         cubos2.add(new Meth(i, j));
                     }
                 }
-                walter.setPosX(150);
-                walter.setPosY(150);
-                walter.setVelocidadX(0);
-                walter.setVelocidadY(0);
             }
         }
 
