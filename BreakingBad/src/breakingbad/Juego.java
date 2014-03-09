@@ -100,7 +100,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
      */
     public void init() {
         pegadaswalter = 3;     //vidas del malo son 3
-        ganaste = false;        
+        ganaste = false;
         decision = -1;
         poderactivo = false;
         letr = false;
@@ -173,7 +173,6 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         tSonido = true;
         nSonido = false;
         bSonido = false;
-        //
 
         for (int i = 80; i < this.getWidth() - 80; i += 92) {  //Se crea una cantidad de bloques para el nivel 1
             for (int j = 100; j < 300; j += 68) {   //48 58
@@ -294,7 +293,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
                 }
             }
         }
-        
+
         //cuando las vidas llegan a 0
         if (vidas <= 0) {
             gameover = true;
@@ -305,7 +304,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         }
         //checa si la lista del nivel 1 esta vacia y pasa al nivel 2
         if (cont == 0) {
-            if (cubos.isEmpty()) {
+            if (cubos.isEmpty() && !ganaste && !gameover && !nivel3) {
                 nivel2 = true;
                 lanzada = false;
                 bola.setPosX(heroe.getPosX() + heroe.getWidth() / 2 - (bola.getWidth() / 2));
@@ -316,8 +315,9 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
             }
         }
         //checa si la lista del nivel 2 esta vacia y pasa al nivel 3
-        if (cubos2.isEmpty() && !nivel3 && !ganaste) {
+        if (cubos2.isEmpty() && !nivel3 && !ganaste && !gameover && !nivel1) {
             nivel3 = true;
+            nivel2 = false;
             walter.setPosX(150);
             walter.setPosY(150);
             walter.setVelocidadX(10);
@@ -341,9 +341,15 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
             tipo2 = 1;
             tipo3 = false;
         }
-        
+
         //verifica si ya empezo el nivel 3
         if (nivel3) {
+            if (walter.getPosX() == -150) {
+                walter.setPosX(150);
+                walter.setPosY(150);
+                walter.setVelocidadX(10);
+                walter.setVelocidadY(3);
+            }
             if (walter.getPosX() + walter.getWidth() > this.getWidth()) {
                 walter.setVelocidadX(-10);
             }
@@ -394,9 +400,13 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         } else {
             movimiento = false;
         }
-        
+
         //checa todas las colisiones del nivel 2
         if (nivel2) {
+            walter.setVelocidadX(0);
+            walter.setVelocidadY(0);
+            walter.setPosX(-100);
+            walter.setPosY(-100);
             for (int i = 0; i < cubos2.size(); i++) {
                 Meth actual = (Meth) cubos2.get(i);
                 if (actual.intersecta(bola)) {
@@ -432,6 +442,10 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         }
         //checa todas las colisiones del nivel 1
         if (nivel1) {
+            walter.setVelocidadX(0);
+            walter.setVelocidadY(0);
+            walter.setPosX(-100);
+            walter.setPosY(-100);
             for (int i = 0; i < cubos.size(); i++) {
                 Meth actual = (Meth) cubos.get(i);
                 if (actual.intersecta(bola)) {
@@ -545,7 +559,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
                 }
             }
         }
-        
+
         //cuando se termina el juego se elimina todas las listas
         if (ganaste || gameover) {
             nivel1 = false;
@@ -667,11 +681,12 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         }
         if (e.getKeyCode() == KeyEvent.VK_N) { //cuando el usuario presiona n el juego empieza otra vez
             if (gameover || ganaste) {
+                cont = 0;
                 vidas = 3;
                 bola.setScore(0);
+                nivel1 = true;
                 gameover = false;
                 ganaste = false;
-                nivel1 = true;                
                 walter.setPosX(-150);
                 walter.setPosY(-150);
                 walter.setVelocidadX(0);
@@ -729,7 +744,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
         if (nivel3 && !ganaste) { //imagen del juego completo
             g.drawImage(fondo3, 0, 0, this);
         }
-        if (heroe != null && bola != null && titulo != null) { 
+        if (heroe != null && bola != null && titulo != null) {
             if (gameover) { //imagen del gameover
                 g.drawImage(fin, 0, 0, this);
                 g.drawImage(im_over, 280, 210, this);
@@ -774,7 +789,7 @@ public class Juego extends JFrame implements Runnable, KeyListener, MouseListene
                     if (caer) { //imagen cuando se cae la pelota y aparece arriba del camion
                         g.drawImage(poder.getImagen(), poder.getPosX(), poder.getPosY(), this);
                     }
-                    if (letr && (!(ganaste || gameover))) { 
+                    if (letr && (!(ganaste || gameover))) {
                         g.setColor(Color.BLACK);
                         g.drawString(letrero, (this.getWidth() / 2) - 100, this.getHeight() / 2);
                         g.setColor(Color.WHITE);
